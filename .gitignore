@@ -1,0 +1,17 @@
+*.opendb
+*.obj
+*.log
+*.pdb
+*.idb
+.vs/
+*.suo
+*.ilk
+*.exe
+*.sdf
+*.suo
+*.vs
+*.user
+settings.json
+bazel-*
+Debug/
+Release/
