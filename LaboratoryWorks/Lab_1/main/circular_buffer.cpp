@@ -232,8 +232,8 @@ void CircularBuffer<T>::clear() {
 
 }
 
-template <class T>
+/*template <class T>
 bool operator==(const CircularBuffer<T> &a, const CircularBuffer<T> &b){}
 
 template <class T>
-bool operator!=(const CircularBuffer<T> &a, const CircularBuffer<T> &b){}
+bool operator!=(const CircularBuffer<T> &a, const CircularBuffer<T> &b){}*/
