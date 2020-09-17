@@ -4,6 +4,7 @@ template <class T>
 class CircularBuffer {
 private:
 	T* buffer;
+	unsigned size;
 public:
 	using value_type = T;
 

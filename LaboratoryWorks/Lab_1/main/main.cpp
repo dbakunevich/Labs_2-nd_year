@@ -3,7 +3,8 @@
 
 using namespace std;
 
-int main() {
+int main(int argc, char *argv[]) {
+    CircularBuffer<int> buff;
 
     cout << 5;
     return 0;
