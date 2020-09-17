@@ -1,11 +1,13 @@
 #include "circular_buffer.h"
-#include <iostream>
 
 using namespace std;
 
 int main(int argc, char *argv[]) {
-    CircularBuffer<int> buff;
+    CircularBuffer<int> buff2(10, 5);
+    CircularBuffer<int> test(10, 6);
 
-    cout << 5;
+    buff2 = test;
+
+
     return 0;
 }
