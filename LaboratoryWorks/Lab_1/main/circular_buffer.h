@@ -117,3 +117,6 @@ bool operator==(const CircularBuffer<T> &a, const CircularBuffer<T> &b);
 
 template <class T>
 bool operator!=(const CircularBuffer<T> &a, const CircularBuffer<T> &b);
+
+
+#include "circular_buffer.inl"
