@@ -21,13 +21,14 @@ CircularBuffer<T>::~CircularBuffer() {
 //Конструктор копирования
 template<class T>
 CircularBuffer<T>::CircularBuffer(const CircularBuffer &cb) : CircularBuffer(cb._capacity) {
-    /*_idxIn = cb._idxIn;
+    _idxIn = cb._idxIn;
     _idxOut = cb._idxOut;
     _capacity = cb._capacity;
+    _size = cb._size;
     _isEmpty = cb._isEmpty;
     _isFull = cb._isFull;
-    memcpy(_buffer, cb._buffer, _capacity * sizeof(T));*/
-    * this = cb;
+    memcpy(_buffer, cb._buffer, _capacity * sizeof(T));
+    //* this = cb;
 }
 
 //Конструирует буфер заданной ёмкости, целиком заполняет его элементом
@@ -39,6 +40,9 @@ CircularBuffer<T>::CircularBuffer(int capacity, const T &elem) {
     _buffer = new T[_capacity];
     for (int i = 0; i < _capacity; ++i) {
         _buffer[i] = elem;
+        _size++;
+        if (full())
+            _isFull = true;
     }
 }
 
@@ -60,6 +64,7 @@ CircularBuffer<T>& CircularBuffer<T>::operator=(const CircularBuffer &cb) {
     _idxIn = cb._idxIn;
     _idxOut = cb._idxOut;
     _capacity = cb._capacity;
+    _size = cb._size;
     _isEmpty = cb._isEmpty;
     _isFull = cb._isFull;
     memcpy(_buffer, cb._buffer, _capacity * sizeof(T));
@@ -69,7 +74,7 @@ CircularBuffer<T>& CircularBuffer<T>::operator=(const CircularBuffer &cb) {
 //Доступ по индексу. Не проверяют правильность индекса.
 template<class T>
 T& CircularBuffer<T>::operator[](int i) {
-    return false;
+    return _buffer[i];
 }
 
 //Доступ по индексу. Не проверяют правильность индекса.
@@ -90,7 +95,7 @@ T &CircularBuffer<T>::at(int i) {
 //Доступ по индексу. Методы бросают исключение в случае неверного индекса.
 template<class T>
 const T &CircularBuffer<T>::at(int i) const {
-    return static_cast<const T&>(const_cast<CircularBuffer<T>&>(at(this)));
+    return static_cast<const T&>(const_cast<CircularBuffer<T>&>(at(i)));
 }
 
 //Ссылка на первый элемент.
@@ -120,7 +125,7 @@ const T &CircularBuffer<T>::back() const {
 //Количество элементов, хранящихся в буфере.
 template<class T>
 int CircularBuffer<T>::size() const {
-    return 0;
+    return _size;
 }
 
 //Ёмкость буфера
@@ -234,11 +239,13 @@ void CircularBuffer<T>::clear() {
 
 template <class T>
 bool operator==(const CircularBuffer<T> &a, const CircularBuffer<T> &b){
-    if (a._idxIn == b.idxIn &&
-        a._idxOut == b.idxOut &&
+    if (&a._buffer == &b._buffer &&
         a._capacity == b._capacity &&
-
+        a._size == b._size &&
+        a._isEmpty == b._isEmpty &&
+        a._isFull == b._isFull) {
         return true;
+    }
     return false;
 }
 
