@@ -40,18 +40,19 @@ CircularBuffer<T>::CircularBuffer(int capacity, const T &elem) {
     _buffer = new T[_capacity];
     for (int i = 0; i < _capacity; ++i) {
         _buffer[i] = elem;
-        _size++;
     }
     if (full()) {
         _isFull = true;
     }
+    _size = _capacity;
+    _idxOut = _capacity - 1;
 }
 
 //Конструирует буфер заданной ёмкости.
 template<class T>
 CircularBuffer<T>::CircularBuffer(int capacity) {
     _capacity = capacity;
-
+    _isEmpty = !_isEmpty;
     _buffer = new T[_capacity];
 }
 
@@ -81,7 +82,7 @@ T& CircularBuffer<T>::operator[](int i) {
 //Доступ по индексу. Не проверяют правильность индекса.
 template<class T>
 const T& CircularBuffer<T>::operator[](int i) const {
-    return static_cast<const T&>(const_cast<CircularBuffer<T>&>(this)[i]);
+    return static_cast<const T&>(const_cast<CircularBuffer<T>&>(*this)[i]); ////!!!!!!
 }
 
 //Доступ по индексу. Методы бросают исключение в случае неверного индекса.
@@ -96,7 +97,7 @@ T &CircularBuffer<T>::at(int i) {
 //Доступ по индексу. Методы бросают исключение в случае неверного индекса.
 template<class T>
 const T &CircularBuffer<T>::at(int i) const {
-    return static_cast<const T&>(const_cast<CircularBuffer<T>&>(at(i)));
+    return static_cast<const T&>(const_cast<CircularBuffer<T>&>(*this).at(i));
 }
 
 //Ссылка на первый элемент.
@@ -108,19 +109,19 @@ T &CircularBuffer<T>::front() {
 //Ссылка на первый элемент.
 template<class T>
 const T &CircularBuffer<T>::front() const {
-    return static_cast<const T&>(const_cast<CircularBuffer<T>&>(front()));
+    return static_cast<const T&>(const_cast<CircularBuffer<T>&>(*this).front());
 }
 
 //Ссылка на последний элемент.
 template<class T>
 T &CircularBuffer<T>::back() {
-    return false;
+    return _buffer[_idxOut];
 }
 
 //Ссылка на последний элемент.
 template<class T>
 const T &CircularBuffer<T>::back() const {
-    return false;
+    return static_cast<const T&>(const_cast<CircularBuffer<T>&>(*this).back());
 }
 
 //Количество элементов, хранящихся в буфере.
@@ -144,13 +145,16 @@ int CircularBuffer<T>::reserve() const {
 //true, если size() == capacity().
 template<class T>
 bool CircularBuffer<T>::full() const {
-    return _size == _capacity;
+    return size() == capacity();
 }
 
 //Проверяем, пустой ли буфер (если ёмкость = 0, то false)
 template<class T>
 bool CircularBuffer<T>::empty() const {
-    return !_isEmpty;
+    if (_capacity == 0){
+        return false;
+    }
+    return true;
 }
 
 //Добавляет элемент в конец буфера.
@@ -158,14 +162,36 @@ bool CircularBuffer<T>::empty() const {
 //первый элемент буфера (т.е., буфер закольцован).
 template<class T>
 void CircularBuffer<T>::push_back(const T &item) {
-
+    if (_idxOut + 1 == _capacity){
+        _buffer[0] = item;
+    }
+    else{
+        _idxOut++;
+        _size++;
+        _buffer[_idxOut] = item;
+    }
+    if (_isEmpty){
+        _isEmpty = false;
+    }
+    if (full()) {
+        _isFull = true;
+    }
 }
 
 //Добавляет новый элемент перед первым элементом буфера.
 //Аналогично push_back, может переписать последний элемент буфера.
 template<class T>
 void CircularBuffer<T>::push_front(const T &item) {
-
+    if(!_isFull){
+        _size++;
+    }
+    _buffer[capacity() - front() - 1] = item;
+    if (_isEmpty){
+        _isEmpty = false;
+    }
+    if (full()) {
+        _isFull = true;
+    }
 }
 
 //удаляет последний элемент буфера.
@@ -181,10 +207,11 @@ void CircularBuffer<T>::pop_front() {
 }
 
 //Сдвигает буфер так, что по нулевому индексу окажется элемент
-//с индексом new_begin.
+//с индексом new_start.
 template<class T>
 void CircularBuffer<T>::rotate(int new_start) {
-
+    _idxIn = (_idxIn + new_start) % _capacity;
+    _idxOut = (_idxOut + new_start) % _capacity;
 }
 
 //Линеаризация - сдвинуть кольцевой буфер так, что его первый элемент
@@ -218,8 +245,8 @@ void CircularBuffer<T>::resize(int new_size, const T &item) {
 template<class T>
 void CircularBuffer<T>::swap(CircularBuffer &cb) {
     CircularBuffer<T> tmp = cb;
-    cb = this;
-    this = tmp;
+    cb = *this;
+    *this = tmp;
 }
 
 //Вставляет элемент item по индексу pos. Ёмкость буфера остается неизменной.
