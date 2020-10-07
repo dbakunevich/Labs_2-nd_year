@@ -41,8 +41,9 @@ CircularBuffer<T>::CircularBuffer(int capacity, const T &elem) {
     for (int i = 0; i < _capacity; ++i) {
         _buffer[i] = elem;
         _size++;
-        if (full())
-            _isFull = true;
+    }
+    if (full()) {
+        _isFull = true;
     }
 }
 
@@ -101,13 +102,13 @@ const T &CircularBuffer<T>::at(int i) const {
 //Ссылка на первый элемент.
 template<class T>
 T &CircularBuffer<T>::front() {
-    return false;
+    return _buffer[_idxIn];
 }
 
 //Ссылка на первый элемент.
 template<class T>
 const T &CircularBuffer<T>::front() const {
-    return false;
+    return static_cast<const T&>(const_cast<CircularBuffer<T>&>(front()));
 }
 
 //Ссылка на последний элемент.
@@ -137,13 +138,13 @@ int CircularBuffer<T>::capacity() const {
 //Количество свободных ячеек в буфере.
 template<class T>
 int CircularBuffer<T>::reserve() const {
-    return capacity() - size();
+    return _capacity - _size;
 }
 
 //true, если size() == capacity().
 template<class T>
 bool CircularBuffer<T>::full() const {
-    return size() == capacity();
+    return _size == _capacity;
 }
 
 //Проверяем, пустой ли буфер (если ёмкость = 0, то false)
@@ -216,13 +217,18 @@ void CircularBuffer<T>::resize(int new_size, const T &item) {
 //Обменивает содержимое буфера с буфером cb.
 template<class T>
 void CircularBuffer<T>::swap(CircularBuffer &cb) {
-
+    CircularBuffer<T> tmp = cb;
+    cb = this;
+    this = tmp;
 }
 
 //Вставляет элемент item по индексу pos. Ёмкость буфера остается неизменной.
 template<class T>
 void CircularBuffer<T>::insert(int pos, const T &item) {
-
+    if (_capacity <= pos || pos < 0){
+        throw std::range_error("bad index");
+    }
+    _buffer[pos] = item;
 }
 
 //Удаляет элементы из буфера в интервале [first, last).

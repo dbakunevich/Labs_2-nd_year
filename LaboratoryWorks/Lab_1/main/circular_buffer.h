@@ -16,7 +16,7 @@ private:
 
 public:
 
-	using value_type = T;
+	//using value_type = T;
 
 	//Конструктор создания пустого буффера
 	CircularBuffer(); // 1
@@ -25,7 +25,7 @@ public:
 	~CircularBuffer(); // 1
 
 	//Конструктор копирования
-	CircularBuffer(const CircularBuffer& cb); //0
+	CircularBuffer(const CircularBuffer& cb); //1
 
 	//Конструирует буфер заданной ёмкости, целиком заполняет его элементом
 	CircularBuffer(int capacity, const T& elem); // 1
