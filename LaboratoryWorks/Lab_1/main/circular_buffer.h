@@ -7,12 +7,10 @@ template <class T>
 class CircularBuffer{
 private:
 	T* _buffer;
-	unsigned long _idxIn = 0;
-	unsigned long _idxOut = 0;
+	unsigned long _idxIn = 0; // tail
+	unsigned long _idxOut = 0; // head
 	unsigned long _capacity = 0;
 	unsigned long _size = 0;
-	bool _isEmpty = true;
-	bool _isFull = false;
 
 public:
 

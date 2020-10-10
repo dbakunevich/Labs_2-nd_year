@@ -14,7 +14,7 @@ CircularBuffer<T>::CircularBuffer() {
 template<class T>
 CircularBuffer<T>::~CircularBuffer() {
     if (_buffer) {
-        free(_buffer);
+        delete _buffer;
     }
 }
 
@@ -25,8 +25,6 @@ CircularBuffer<T>::CircularBuffer(const CircularBuffer &cb) : CircularBuffer(cb.
     _idxOut = cb._idxOut;
     _capacity = cb._capacity;
     _size = cb._size;
-    _isEmpty = cb._isEmpty;
-    _isFull = cb._isFull;
     memcpy(_buffer, cb._buffer, _capacity * sizeof(T));
     //* this = cb;
 }
@@ -34,15 +32,10 @@ CircularBuffer<T>::CircularBuffer(const CircularBuffer &cb) : CircularBuffer(cb.
 //Конструирует буфер заданной ёмкости, целиком заполняет его элементом
 template<class T>
 CircularBuffer<T>::CircularBuffer(int capacity, const T &elem) {
-    _isEmpty = false;
     _capacity = capacity;
-
     _buffer = new T[_capacity];
     for (int i = 0; i < _capacity; ++i) {
         _buffer[i] = elem;
-    }
-    if (full()) {
-        _isFull = true;
     }
     _size = _capacity;
     _idxOut = _capacity - 1;
@@ -52,7 +45,6 @@ CircularBuffer<T>::CircularBuffer(int capacity, const T &elem) {
 template<class T>
 CircularBuffer<T>::CircularBuffer(int capacity) {
     _capacity = capacity;
-    _isEmpty = !_isEmpty;
     _buffer = new T[_capacity];
 }
 
@@ -62,14 +54,13 @@ CircularBuffer<T>& CircularBuffer<T>::operator=(const CircularBuffer &cb) {
     if (this == &cb) {
         return *this;
     }
-    free(_buffer);
+    delete []_buffer;
+    _buffer = new T[cb._capacity];
     _idxIn = cb._idxIn;
     _idxOut = cb._idxOut;
     _capacity = cb._capacity;
     _size = cb._size;
-    _isEmpty = cb._isEmpty;
-    _isFull = cb._isFull;
-    memcpy(_buffer, cb._buffer, _capacity * sizeof(T));
+    memcpy(_buffer, cb._buffer, _capacity * sizeof(T)); //переделать
     return *this;
 }
 
@@ -162,41 +153,89 @@ bool CircularBuffer<T>::empty() const {
 //первый элемент буфера (т.е., буфер закольцован).
 template<class T>
 void CircularBuffer<T>::push_back(const T &item) {
-    if (_idxOut + 1 == _capacity){
-        _buffer[0] = item;
+    if (full()){
+        _idxOut = _idxIn;
+        _idxIn = (_idxIn + 1) % _capacity;
+        _buffer[_idxOut] = item;
+    }
+    else if (_size == 0) {
+        _buffer[_idxOut] = item;
+        _size++;
     }
     else{
         _idxOut++;
-        _size++;
         _buffer[_idxOut] = item;
-    }
-    if (_isEmpty){
-        _isEmpty = false;
-    }
-    if (full()) {
-        _isFull = true;
+        _size++;
     }
 }
 
 //Добавляет новый элемент перед первым элементом буфера.
 //Аналогично push_back, может переписать последний элемент буфера.
+// 0 1 2 3 ..
 template<class T>
 void CircularBuffer<T>::push_front(const T &item) {
-    if(!_isFull){
+    if (full()){
+        _idxIn = _idxOut;
+        if (_idxOut == 0){
+            _idxOut = _capacity - 1;
+        }
+        else{
+            _idxOut--;
+        }
+        _buffer[_idxIn] = item;
+    }
+    else if(_size == 0){
+        _buffer[_idxIn] = item;
         _size++;
     }
-    _buffer[capacity() - front() - 1] = item;
-    if (_isEmpty){
-        _isEmpty = false;
+    else{
+        if (_idxIn == 0){
+            _idxIn = _capacity - 1;
+        }
+        else{
+            _idxIn--;
+        }
+        _buffer[_idxIn] = item;
+        _size++;
     }
-    if (full()) {
-        _isFull = true;
-    }
+
 }
 
+//delete
+// 1 2 3 4 5
+// 1 2 3 4
+
+// 6 7 3 4 5
+// 6 3 4 5
 //удаляет последний элемент буфера.
 template<class T>
 void CircularBuffer<T>::pop_back() {
+    if (_size == 0) {
+        throw std::range_error("bad index");
+    }
+    else if(_size == 1){
+        CircularBuffer<T> tmp (_capacity - 1);
+        *this = tmp;
+    }
+    else {
+        _capacity--;
+        _size--;
+        CircularBuffer<T> tmp(_capacity);
+        if (full()) {
+            for (auto i = 0; i < _idxOut; i++) {
+                tmp[i] = (*this)[i];
+            }
+            for (auto i = _idxOut; i < _capacity; i++) {
+                tmp[i] = (*this)[i + 1];
+            }
+        } else {
+            for (auto i = 0; i < _size; i++) {
+                tmp[i] = (*this)[i];
+            }
+        }
+        _idxOut--;
+        (*this)._buffer = tmp._buffer;
+    }
 
 }
 
@@ -267,19 +306,21 @@ void CircularBuffer<T>::erase(int first, int last) {
 //Очищает буфер.
 template<class T>
 void CircularBuffer<T>::clear() {
-    free(_buffer);
+    delete [] _buffer;
+    _idxIn = _idxOut = 0;
+    _capacity = _size = 0;
+    _buffer = nullptr;
 }
 
 template <class T>
 bool operator==(const CircularBuffer<T> &a, const CircularBuffer<T> &b){
-    if (&a._buffer == &b._buffer &&
-        a._capacity == b._capacity &&
-        a._size == b._size &&
-        a._isEmpty == b._isEmpty &&
-        a._isFull == b._isFull) {
-        return true;
-    }
-    return false;
+    if (a.size() != b.size())
+        return false;
+    for (int i = 0; i < a.size(); ++i)
+        if (a[i] != b[i])
+            return false;
+
+    return true;
 }
 
 template <class T>
