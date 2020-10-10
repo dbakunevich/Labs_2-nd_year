@@ -3,6 +3,7 @@
 #include <exception>
 #include <cstring>
 #include <stdexcept>
+#include <iostream>
 
 //Конструктор создания пустого буффера
 template<class T>
@@ -238,8 +239,10 @@ void CircularBuffer<T>::pop_back() {
         }
         if (_idxOut == 0){
             _idxOut = _capacity - 1;
+        } else{
+            _idxOut--;
         }
-        (*this)._buffer = tmp._buffer;
+        memcpy(_buffer, tmp._buffer, tmp._capacity * sizeof(T));
     }
 }
 
@@ -276,7 +279,7 @@ void CircularBuffer<T>::pop_front() {
             _idxIn = 0;
         }
 
-        (*this)._buffer = tmp._buffer;
+        memcpy(_buffer, tmp._buffer, tmp._capacity * sizeof(T));
     }
 
 }
@@ -285,8 +288,12 @@ void CircularBuffer<T>::pop_front() {
 //с индексом new_start.
 template<class T>
 void CircularBuffer<T>::rotate(int new_start) {
-    _idxIn = (_idxIn + new_start) % _capacity;
-    _idxOut = (_idxOut + new_start) % _capacity;
+    if (new_start < 0 || new_start >= _capacity) {
+        throw std::range_error("bad index");
+    }
+    _idxOut = (_capacity - _idxIn + _idxOut + new_start) % _capacity;
+    _idxIn = new_start;
+
 }
 
 //Линеаризация - сдвинуть кольцевой буфер так, что его первый элемент
@@ -294,7 +301,7 @@ void CircularBuffer<T>::rotate(int new_start) {
 //на первый элемент.
 template<class T>
 T *CircularBuffer<T>::linearize() {
-    return nullptr;
+    return front((*this).rotate(0));
 }
 
 //Проверяет, является ли буфер линеаризованным.
@@ -342,10 +349,9 @@ void CircularBuffer<T>::erase(int first, int last) {
 //Очищает буфер.
 template<class T>
 void CircularBuffer<T>::clear() {
-    delete [] _buffer;
+    _buffer = nullptr;
     _idxIn = _idxOut = 0;
     _capacity = _size = 0;
-    _buffer = nullptr;
 }
 
 template <class T>
