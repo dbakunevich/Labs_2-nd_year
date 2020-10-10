@@ -233,15 +233,51 @@ void CircularBuffer<T>::pop_back() {
                 tmp[i] = (*this)[i];
             }
         }
-        _idxOut--;
+        if (_idxIn > _idxOut){
+            _idxIn--;
+        }
+        if (_idxOut == 0){
+            _idxOut = _capacity - 1;
+        }
         (*this)._buffer = tmp._buffer;
     }
-
 }
 
 //удаляет первый элемент буфера.
 template<class T>
 void CircularBuffer<T>::pop_front() {
+    if (_size == 0) {
+        throw std::range_error("bad index");
+    }
+    else if(_size == 1){
+        CircularBuffer<T> tmp (_capacity - 1);
+        *this = tmp;
+    }
+    else {
+        _capacity--;
+        _size--;
+        CircularBuffer<T> tmp(_capacity);
+        if (full()) {
+            for (auto i = 0; i < _idxIn; i++) {
+                tmp[i] = (*this)[i];
+            }
+            for (auto i = _idxIn; i < _capacity; i++) {
+                tmp[i] = (*this)[i + 1];
+            }
+        } else {
+            for (auto i = 0; i < _size; i++) {
+                tmp[i] = (*this)[i + 1];
+            }
+        }
+        if (_idxOut > _idxIn){
+            _idxOut--;
+        }
+        if (_idxIn == _capacity){
+            _idxIn = 0;
+        }
+
+        (*this)._buffer = tmp._buffer;
+    }
 
 }
 

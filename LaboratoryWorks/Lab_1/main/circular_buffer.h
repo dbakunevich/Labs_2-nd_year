@@ -1,7 +1,6 @@
 #pragma once
 
-// 0 - надо писать полностью, 1 - что-то уже есть, надо допилить и чекнуть
-// 2 - все отлично
+// 0 - надо писать, 1 - написал, 0.5 - надо проверить
 
 template <class T>
 class CircularBuffer{
@@ -32,32 +31,32 @@ public:
 	explicit CircularBuffer(int capacity); // 1
 
 	//Оператор присваивания.
-	CircularBuffer& operator=(const CircularBuffer& cb); // 0
+	CircularBuffer& operator=(const CircularBuffer& cb); // 1
 
 	//Доступ по индексу. Не проверяют правильность индекса.
-	T& operator[](int i); // 0
-	const T& operator[](int i) const; // 0
+	T& operator[](int i); // 1
+	const T& operator[](int i) const; // 1
 
 	//Доступ по индексу. Методы бросают исключение в случае неверного индекса.
-	T& at(int i); // 0
-	const T& at(int i) const; // 0
+	T& at(int i); // 1
+	const T& at(int i) const; // 1
 
 	//Ссылка на первый элемент.
-	T& front(); // 0
-	const T& front() const; // 0
+	T& front(); // 0.5
+	const T& front() const; // 0.5
 
 	//Ссылка на последний элемент.
 	T& back(); // 0
-	const T& back() const; // 0
+	const T& back() const; // 0.5
 
 	//Количество элементов, хранящихся в буфере.
-	int size() const; // 0
+	int size() const; // 1
 
 	//Ёмкость буфера
     int capacity() const; // 1
 
 	//Количество свободных ячеек в буфере.
-	int reserve() const; // 0
+	int reserve() const; // 1
 
 	//true, если size() == capacity().
 	bool full() const; // 1
@@ -68,17 +67,17 @@ public:
 	//Добавляет элемент в конец буфера.
 	//Если текущий размер буфера равен его ёмкости, то переписывается
 	//первый элемент буфера (т.е., буфер закольцован).
-	void push_back(const T& item = T()); // 0
+	void push_back(const T& item = T()); // 0.5
 
 	//Добавляет новый элемент перед первым элементом буфера.
 	//Аналогично push_back, может переписать последний элемент буфера.
-	void push_front(const T& item = T()); // 0
+	void push_front(const T& item = T()); // 0.5
 
 	//удаляет последний элемент буфера.
-	void pop_back(); // 0
+	void pop_back(); // 0.5
 
 	//удаляет первый элемент буфера.
-	void pop_front(); // 0
+	void pop_front(); // 0.5
 
 	//Сдвигает буфер так, что по нулевому индексу окажется элемент
 	//с индексом new_begin.
