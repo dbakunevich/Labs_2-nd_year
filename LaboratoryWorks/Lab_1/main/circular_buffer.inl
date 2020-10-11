@@ -15,7 +15,8 @@ CircularBuffer<T>::CircularBuffer() {
 template<class T>
 CircularBuffer<T>::~CircularBuffer() {
     if (_buffer) {
-        delete _buffer;
+        clear();
+        delete [] _buffer;
     }
 }
 
@@ -301,26 +302,50 @@ void CircularBuffer<T>::rotate(int new_start) {
 //на первый элемент.
 template<class T>
 T *CircularBuffer<T>::linearize() {
-    return front((*this).rotate(0));
+    rotate(0);
+    return _buffer;
 }
 
 //Проверяет, является ли буфер линеаризованным.
 template<class T>
 bool CircularBuffer<T>::is_linearized() const {
+    if (_idxIn == 0){
+        return true;
+    }
     return false;
 }
 
-//Проверяет, является ли буфер линеаризованным.
 template<class T>
 void CircularBuffer<T>::set_capacity(int new_capacity_) {
-
+    linearize();
+    T* tmp = new T[new_capacity_];
+    if (_capacity >= new_capacity_){
+        for (auto i = 0; i < new_capacity_; i++){
+            tmp[i] = _buffer[i];
+        }
+    }
+    else{
+        for (auto i = 0; i < _capacity; i++){
+            tmp[i] = _buffer[i];
+        }
+    }
+    memcpy(_buffer, tmp, new_capacity_ * sizeof(T));
+    _capacity = new_capacity_;
 }
 
 //Изменяет размер буфера.
 //В случае расширения, новые элементы заполняются элементом item.
 template<class T>
 void CircularBuffer<T>::resize(int new_size, const T &item) {
-
+    bool _isMore = new_size > _capacity;
+    auto _assist = _capacity;
+    set_capacity(new_size);
+    if (_isMore){
+        for (auto i = _assist; i < new_size; i++) {
+            _buffer[i] = item;
+            _size++;
+        }
+    }
 }
 
 //Обменивает содержимое буфера с буфером cb.
@@ -343,7 +368,9 @@ void CircularBuffer<T>::insert(int pos, const T &item) {
 //Удаляет элементы из буфера в интервале [first, last).
 template<class T>
 void CircularBuffer<T>::erase(int first, int last) {
-
+    /*if (_capacity <= pos || pos < 0){
+        throw std::range_error("bad index");
+    }*/
 }
 
 //Очищает буфер.
