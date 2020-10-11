@@ -17,23 +17,25 @@ TEST(T, T) {
 }
 
 int main(int argc, char *argv[]) {
-    CircularBuffer<int> buff2(4);
-    buff2.push_back(11);
-    /*for (auto i = 0; i < buff2.capacity(); i++) {
+    CircularBuffer<int> buff2(11);
+    for (int i = 0; i < 5; ++i) {
+        buff2.push_front(i);
+    }
+    buff2.push_back(10);
+    for (auto i = 0; i < buff2.capacity(); i++) {
+        cout << buff2[i] << ' ';
+    }
+    cout << endl;
+    /*buff2.push_front(-11);
+    for (auto i = 0; i < buff2.capacity(); i++) {
         cout << buff2[i] << ' ';
     }
     cout << endl;*/
-    buff2.push_front(-11);
-    /*for (auto i = 0; i < buff2.capacity(); i++) {
+    buff2.erase(2, 5);
+    for (auto i = 0; i < buff2.capacity(); i++) {
         cout << buff2[i] << ' ';
     }
-    cout << endl;*/
-    buff2.pop_back();
-    /*for (auto i = 0; i < buff2.capacity(); i++) {
-        cout << buff2[i] << ' ';
-    }
-    cout << endl;*/
-    cout << "back" << buff2.back() << endl << "front" << buff2.front();
+    cout << endl;
     /*CircularBuffer<int> buff1(10);
     for (int i = 0; i < buff2.capacity() + 3; i++) {
         buff2.push_back(i + 1);

@@ -3,7 +3,6 @@
 #include <exception>
 #include <cstring>
 #include <stdexcept>
-#include <iostream>
 
 //Конструктор создания пустого буффера
 template<class T>
@@ -223,18 +222,13 @@ void CircularBuffer<T>::pop_back() {
         _capacity--;
         _size--;
         CircularBuffer<T> tmp(_capacity);
-        if (full()) {
-            for (auto i = 0; i < _idxOut; i++) {
-                tmp[i] = (*this)[i];
-            }
-            for (auto i = _idxOut; i < _capacity; i++) {
-                tmp[i] = (*this)[i + 1];
-            }
-        } else {
-            for (auto i = 0; i < _size; i++) {
-                tmp[i] = (*this)[i];
-            }
+        for (auto i = 0; i < _idxOut; i++) {
+            tmp[i] = (*this)[i];
         }
+        for (auto i = _idxOut; i < _capacity; i++) {
+            tmp[i] = (*this)[i + 1];
+        }
+
         if (_idxIn > _idxOut){
             _idxIn--;
         }
@@ -243,6 +237,7 @@ void CircularBuffer<T>::pop_back() {
         } else{
             _idxOut--;
         }
+
         memcpy(_buffer, tmp._buffer, tmp._capacity * sizeof(T));
     }
 }
@@ -261,17 +256,11 @@ void CircularBuffer<T>::pop_front() {
         _capacity--;
         _size--;
         CircularBuffer<T> tmp(_capacity);
-        if (full()) {
-            for (auto i = 0; i < _idxIn; i++) {
-                tmp[i] = (*this)[i];
-            }
-            for (auto i = _idxIn; i < _capacity; i++) {
-                tmp[i] = (*this)[i + 1];
-            }
-        } else {
-            for (auto i = 0; i < _size; i++) {
-                tmp[i] = (*this)[i + 1];
-            }
+        for (auto i = 0; i < _idxIn; i++) {
+            tmp[i] = (*this)[i];
+        }
+        for (auto i = _idxIn; i < _capacity; i++) {
+            tmp[i] = (*this)[i + 1];
         }
         if (_idxOut > _idxIn){
             _idxOut--;
@@ -365,12 +354,31 @@ void CircularBuffer<T>::insert(int pos, const T &item) {
     _buffer[pos] = item;
 }
 
+
+// 0 1 2 3 4 5 6 7 8 9 10
+// [3, 7)
+// 0 1 2 7 8 9 10
+
 //Удаляет элементы из буфера в интервале [first, last).
 template<class T>
 void CircularBuffer<T>::erase(int first, int last) {
-    /*if (_capacity <= pos || pos < 0){
+    if (first > last || _idxIn < (last||first) < _idxOut) {
         throw std::range_error("bad index");
-    }*/
+    }
+    auto _assist = _capacity - last + first;
+    T* _tmp = new T[_assist];
+    for (auto i = 0; i < first; i++){
+        _tmp[i] = _buffer[i];
+    }
+    for (int i = first; i < _assist; ++i) {
+        _tmp[i] = _buffer[last - first + i];
+    }
+    _size = _idxOut - last + first + 1;
+    _capacity = _assist;
+    _buffer = nullptr;
+    _buffer = new T[_assist];
+    memcpy(_buffer, _tmp, _assist * sizeof(T));
+
 }
 
 //Очищает буфер.
