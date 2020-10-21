@@ -22,6 +22,8 @@ int main(int argc, char *argv[]) {
         buff2.push_front(i);
     }
     buff2.push_back(10);
+    buff2.push_back(10);
+    buff2.push_back(10);
     for (auto i = 0; i < buff2.capacity(); i++) {
         cout << buff2[i] << ' ';
     }
@@ -31,7 +33,27 @@ int main(int argc, char *argv[]) {
         cout << buff2[i] << ' ';
     }
     cout << endl;*/
-    buff2.erase(2, 5);
+    buff2.rotate(5);
+    for (auto i = 0; i < buff2.capacity(); i++) {
+        cout << buff2[i] << ' ';
+    }
+    cout << endl;
+    buff2.rotate(1);
+    for (auto i = 0; i < buff2.capacity(); i++) {
+        cout << buff2[i] << ' ';
+    }
+    cout << endl;
+    buff2.rotate(10);
+    for (auto i = 0; i < buff2.capacity(); i++) {
+        cout << buff2[i] << ' ';
+    }
+    cout << endl;
+    buff2.insert(0, 100000);
+    for (auto i = 0; i < buff2.capacity(); i++) {
+        cout << buff2[i] << ' ';
+    }
+    cout << endl;
+    buff2.rotate(5);
     for (auto i = 0; i < buff2.capacity(); i++) {
         cout << buff2[i] << ' ';
     }
