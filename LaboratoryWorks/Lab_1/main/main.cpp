@@ -21,6 +21,7 @@ int main(int argc, char *argv[]) {
     for (int i = 0; i < 5; ++i) {
         buff2.push_front(i);
     }
+    CircularBuffer<int> test = buff2;
     buff2.push_back(10);
     buff2.push_back(10);
     buff2.push_back(10);

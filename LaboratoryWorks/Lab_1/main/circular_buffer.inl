@@ -2,6 +2,7 @@
 #include <malloc.h>
 #include <exception>
 #include <cstring>
+#include <iterator>
 #include <stdexcept>
 
 //Конструктор создания пустого буффера
@@ -61,7 +62,7 @@ CircularBuffer<T>& CircularBuffer<T>::operator=(const CircularBuffer &cb) {
     _idxOut = cb._idxOut;
     _capacity = cb._capacity;
     _size = cb._size;
-    memcpy(_buffer, cb._buffer, _capacity * sizeof(T)); //переделать
+    std::copy(std::begin(cb._buffer), std::end(cb._buffer), std::begin(_buffer));
     return *this;
 }
 
