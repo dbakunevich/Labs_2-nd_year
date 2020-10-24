@@ -62,7 +62,7 @@ CircularBuffer<T>& CircularBuffer<T>::operator=(const CircularBuffer &cb) {
     _idxOut = cb._idxOut;
     _capacity = cb._capacity;
     _size = cb._size;
-    std::copy(std::begin(cb._buffer), std::end(cb._buffer), std::begin(_buffer));
+    memcpy(_buffer, cb._buffer, cb.capacity() * sizeof(T));
     return *this;
 }
 
@@ -276,8 +276,6 @@ void CircularBuffer<T>::pop_front() {
 //с индексом new_start.
 template<class T>
 void CircularBuffer<T>::rotate(int new_start) {
-    //ПЕРЕПИШИ. НУЖНО СКОПИРОВАТЬ БУФЕР В ДИАПАЗОНЕ
-    //ОТ ХВОСТА ДО ГОЛОВЫ ОТНОСИТЕЛЬНО new_start
     if (new_start < 0 || new_start >= _capacity) {
         throw std::range_error("bad index");
     }
@@ -307,7 +305,7 @@ void CircularBuffer<T>::rotate(int new_start) {
 template<class T>
 T *CircularBuffer<T>::linearize() {
     rotate(0);
-    return _buffer[0];
+    return _buffer;
 }
 
 //Проверяет, является ли буфер линеаризованным.
@@ -389,7 +387,8 @@ void CircularBuffer<T>::insert(int pos, const T &item) {
 //Удаляет элементы из буфера в интервале [first, last).
 template<class T>
 void CircularBuffer<T>::erase(int first, int last) {
-    if (first > last || _idxIn > (last||first) > _idxOut) {
+    linearize();
+    if (first > last || first < _idxIn || last > _idxOut) {
         throw std::range_error("bad index");
     }
     auto _assist = _capacity - last + first;
@@ -397,13 +396,12 @@ void CircularBuffer<T>::erase(int first, int last) {
     for (auto i = 0; i < first; i++){
         _tmp[i] = _buffer[i];
     }
-    for (int i = first; i < _assist; i++) {
+    for (auto i = first; i < _assist; i++) {
         _tmp[i] = _buffer[last - first + i];
     }
     _size = _idxOut - last + first + 1;
     _capacity = _assist;
-    _buffer = nullptr;
-    _buffer = new T[_assist];
+    _idxOut = _size - 1;
     memcpy(_buffer, _tmp, _assist * sizeof(T));
 
 }
