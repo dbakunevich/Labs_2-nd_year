@@ -210,7 +210,6 @@ void CircularBuffer<T>::pop_back() {
     }
     else if(_size == 1){
         CircularBuffer<T> tmp (_capacity - 1);
-        _size = 0;
         *this = tmp;
     }
     else {
@@ -218,10 +217,10 @@ void CircularBuffer<T>::pop_back() {
         _size--;
         T* tmp = new T[_capacity];
         for (auto i = 0; i < _idxOut; i++) {
-            tmp[i] = (*this)[i];
+            tmp[i] = _buffer[i];
         }
         for (auto i = _idxOut; i < _capacity; i++) {
-            tmp[i] = (*this)[i + 1];
+            tmp[i] = _buffer[i + 1];
         }
 
         if (_idxIn > _idxOut){
@@ -245,7 +244,6 @@ void CircularBuffer<T>::pop_front() {
     }
     else if(_size == 1){
         CircularBuffer<T> tmp (_capacity - 1);
-        _size = 0;
         *this = tmp;
     }
     else {
@@ -253,10 +251,10 @@ void CircularBuffer<T>::pop_front() {
         _size--;
         T* tmp = new T[_capacity];
         for (auto i = 0; i < _idxIn; i++) {
-            tmp[i] = (*this)[i];
+            tmp[i] = _buffer[i];
         }
         for (auto i = _idxIn; i < _capacity; i++) {
-            tmp[i] = (*this)[i + 1];
+            tmp[i] = _buffer[i + 1];
         }
         if (_idxOut > _idxIn){
             _idxOut--;
@@ -331,8 +329,8 @@ void CircularBuffer<T>::set_capacity(int new_capacity_) {
             tmp[i] = _buffer[i];
         }
     }
-    memcpy(_buffer, tmp, new_capacity_ * sizeof(T));
     _capacity = new_capacity_;
+    memcpy(_buffer, tmp, _capacity * sizeof(T));
 }
 
 //Изменяет размер буфера.
@@ -379,10 +377,6 @@ void CircularBuffer<T>::insert(int pos, const T &item) {
     _buffer[pos] = item;
 }
 
-
-// 0 1 2 3 4 5 6 7 8 9 10
-// [3, 7)
-// 0 1 2 7 8 9 10
 
 //Удаляет элементы из буфера в интервале [first, last).
 template<class T>
