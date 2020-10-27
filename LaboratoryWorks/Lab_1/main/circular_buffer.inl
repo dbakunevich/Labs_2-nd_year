@@ -27,8 +27,7 @@ CircularBuffer<T>::CircularBuffer(const CircularBuffer &cb) : CircularBuffer(cb.
     _idxOut = cb._idxOut;
     _capacity = cb._capacity;
     _size = cb._size;
-    memcpy(_buffer, cb._buffer, _capacity * sizeof(T));
-    //* this = cb;
+    std::copy(cb._buffer, cb._buffer + cb._size, _buffer);
 }
 
 //Конструирует буфер заданной ёмкости, целиком заполняет его элементом
@@ -62,14 +61,14 @@ CircularBuffer<T>& CircularBuffer<T>::operator=(const CircularBuffer &cb) {
     _idxOut = cb._idxOut;
     _capacity = cb._capacity;
     _size = cb._size;
-    memcpy(_buffer, cb._buffer, cb.capacity() * sizeof(T));
+    std::copy(cb._buffer, cb._buffer + cb._size, _buffer);
     return *this;
 }
 
 //Доступ по индексу. Не проверяют правильность индекса.
 template<class T>
 T& CircularBuffer<T>::operator[](int i) {
-    return _buffer[i];
+    return _buffer[(_idxIn + i) % _capacity];
 }
 
 //Доступ по индексу. Не проверяют правильность индекса.
@@ -84,7 +83,7 @@ T &CircularBuffer<T>::at(int i) {
     if (std::min(_idxIn, _idxOut) > i || i > std::max(_idxIn, _idxOut)) {
         throw std::range_error("bad index");
     }
-    return _buffer[i];
+    return _buffer[(_idxIn + i) % _capacity];
 }
 
 //Доступ по индексу. Методы бросают исключение в случае неверного индекса.
@@ -144,10 +143,7 @@ bool CircularBuffer<T>::full() const {
 //Проверяем, пустой ли буфер (если ёмкость = 0, то false)
 template<class T>
 bool CircularBuffer<T>::empty() const {
-    if (_capacity == 0){
-        return false;
-    }
-    return true;
+    return size() == 0 && capacity() != 0;
 }
 
 //Добавляет элемент в конец буфера.
@@ -351,9 +347,7 @@ void CircularBuffer<T>::resize(int new_size, const T &item) {
 //Обменивает содержимое буфера с буфером cb.
 template<class T>
 void CircularBuffer<T>::swap(CircularBuffer &cb) {
-    CircularBuffer<T> tmp = cb;
-    cb = *this;
-    *this = tmp;
+    std::swap(cb,(*this));
 }
 
 //Вставляет элемент item по индексу pos. Ёмкость буфера остается неизменной.
