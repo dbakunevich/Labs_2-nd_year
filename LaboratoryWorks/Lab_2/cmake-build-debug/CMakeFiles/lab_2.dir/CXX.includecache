@@ -12,6 +12,12 @@ vector
 window.h
 /home/dmitry/CLionProjects/OOP/ooop-19208/LaboratoryWorks/Lab_2/graphics/window.h
 
+/home/dmitry/CLionProjects/OOP/ooop-19208/LaboratoryWorks/Lab_2/graphics/visualizer.cpp
+iostream
+-
+visualizer.h
+/home/dmitry/CLionProjects/OOP/ooop-19208/LaboratoryWorks/Lab_2/graphics/visualizer.h
+
 /home/dmitry/CLionProjects/OOP/ooop-19208/LaboratoryWorks/Lab_2/graphics/visualizer.h
 vector
 -
@@ -29,26 +35,6 @@ string
 -
 SDL2/SDL.h
 -
-
-/home/dmitry/CLionProjects/OOP/ooop-19208/LaboratoryWorks/Lab_2/main/element.h
-../graphics/visualizer.h
-/home/dmitry/CLionProjects/OOP/ooop-19208/LaboratoryWorks/Lab_2/graphics/visualizer.h
-
-/home/dmitry/CLionProjects/OOP/ooop-19208/LaboratoryWorks/Lab_2/main/main.cpp
-iostream
--
-vector
--
-cstdlib
--
-ctime
--
-set
--
-algorithm
--
-../graphics/visualizer.h
-/home/dmitry/CLionProjects/OOP/ooop-19208/LaboratoryWorks/Lab_2/graphics/visualizer.h
-element.h
-/home/dmitry/CLionProjects/OOP/ooop-19208/LaboratoryWorks/Lab_2/main/element.h
+window.h
+/home/dmitry/CLionProjects/OOP/ooop-19208/LaboratoryWorks/Lab_2/graphics/window.h
 

@@ -1,13 +1,14 @@
 #include "window.h"
 #include <iostream>
+#include <utility>
 
 Window::Window() {
     if (init() == EXIT_FAILURE)
         is_closed = true;
 }
 
-Window::Window(std::string title_, int width_, int height_) 
-: title(title_), width(width_), height(height_) {
+[[maybe_unused]] Window::Window(std::string title_, int width_, int height_)
+: title(std::move(title_)), width(width_), height(height_) {
     if (init() == EXIT_FAILURE)
         is_closed = true;
 }
@@ -83,3 +84,4 @@ Window::~Window() {
     SDL_DestroyWindow(window);
     SDL_Quit();
 }
+

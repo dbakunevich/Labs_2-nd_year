@@ -25,7 +25,7 @@ private:
 template <class Iter>
 void Visualizer::setContainer(Iter begin, Iter end) {
     while (begin != end) {
-        elements.push_back(*begin);
+        elements.push_back(static_cast<int>(*begin));
         begin++;
     }
     colors.resize(elements.size(), Color{255, 255, 255, 255});

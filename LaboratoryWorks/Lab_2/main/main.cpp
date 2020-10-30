@@ -1,9 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <cstdlib>
-#include <ctime>
 #include <set>
-#include <algorithm>
 
 #include "../graphics/visualizer.h"
 #include "element.h"
@@ -17,7 +15,7 @@ std::vector<Elem> create(int size) {
         int val = std::rand() % size;
         if (!used.count(val)) {
             used.insert(val);
-            vect.push_back(Elem(val, index));
+            vect.emplace_back(val, index);
             index++;
         }
     }
@@ -26,12 +24,13 @@ std::vector<Elem> create(int size) {
     return vect;
 }
 
-int main(int argc, char **argv) {
-    std::vector<Elem> vect{create(100)};  
+int main() {
+    std::vector<Elem> vect{create(400)};
     Visualizer::getInstance().clear();
 
     std::sort(vect.begin(), vect.end());
 
     Visualizer::getInstance().draw();
+    std::cout << "Поздравляем!!!!";
     return 0;
 }
