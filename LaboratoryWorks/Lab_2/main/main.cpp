@@ -26,7 +26,7 @@ std::vector<Elem> create(int size) {
     return vect;
 }
 
-int SDL_main(int argc, char **argv) {
+int main(int argc, char **argv) {
     std::vector<Elem> vect{create(100)};  
     Visualizer::getInstance().clear();
 

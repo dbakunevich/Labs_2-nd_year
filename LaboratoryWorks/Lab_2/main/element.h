@@ -3,13 +3,17 @@
 
 class Elem {
 private:
-	int data;
-	int index;
+	int _data;
+	int _index;
 public:
     Elem(int data_, int index_)
-	 : data(data_), index(index_) {}
- 
-    operator int() const {
-        return data;
+	 : _data(data_), _index(index_) {}
+
+    explicit operator int() const {
+        return _data;
+    }
+
+    [[nodiscard]] int index() const{
+        return _index;
     }
 };
