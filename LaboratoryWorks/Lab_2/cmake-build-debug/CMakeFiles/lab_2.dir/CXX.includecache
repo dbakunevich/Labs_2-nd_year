@@ -38,3 +38,21 @@ SDL2/SDL.h
 window.h
 /home/dmitry/CLionProjects/OOP/ooop-19208/LaboratoryWorks/Lab_2/graphics/window.h
 
+/home/dmitry/CLionProjects/OOP/ooop-19208/LaboratoryWorks/Lab_2/main/element.h
+../graphics/visualizer.h
+/home/dmitry/CLionProjects/OOP/ooop-19208/LaboratoryWorks/Lab_2/graphics/visualizer.h
+
+/home/dmitry/CLionProjects/OOP/ooop-19208/LaboratoryWorks/Lab_2/main/main.cpp
+iostream
+-
+vector
+-
+cstdlib
+-
+set
+-
+../graphics/visualizer.h
+/home/dmitry/CLionProjects/OOP/ooop-19208/LaboratoryWorks/Lab_2/graphics/visualizer.h
+element.h
+/home/dmitry/CLionProjects/OOP/ooop-19208/LaboratoryWorks/Lab_2/main/element.h
+

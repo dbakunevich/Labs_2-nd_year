@@ -15,6 +15,8 @@ public:
     Assign(int first, int second) : _value_1(first), _value_2(second){};
     virtual void execute(std::vector<int> &container, std::vector<Color> &colors) const {
         container[_value_1] = _value_2;
+        colors[_value_1].set(0, 255, 255, 0);
+        colors[_value_2].set(0, 255, 255, 0);
     }
 };
 
@@ -25,10 +27,7 @@ private:
 public:
     Compare(int first, int second) : _value_1(first), _value_2(second) {};
     virtual void execute(std::vector<int> &container, std::vector<Color> &colors) const{
-        for(int i = 0; i < colors.size(); i++) {
-            if (i == _value_1 || i == _value_2){
-                colors[i].set(255, 0, 255, 2);
-            }
-        }
+        colors[_value_1].set(255, 0, 255, 0);
+        colors[_value_2].set(255, 0, 255, 0);
    }
 };
