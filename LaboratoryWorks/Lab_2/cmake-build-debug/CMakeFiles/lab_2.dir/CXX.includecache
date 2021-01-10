@@ -30,6 +30,14 @@ window.h
 commands.h
 /home/dmitry/CLionProjects/OOP/ooop-19208/LaboratoryWorks/Lab_2/graphics/commands.h
 
+/home/dmitry/CLionProjects/OOP/ooop-19208/LaboratoryWorks/Lab_2/graphics/window.cpp
+window.h
+/home/dmitry/CLionProjects/OOP/ooop-19208/LaboratoryWorks/Lab_2/graphics/window.h
+iostream
+-
+utility
+-
+
 /home/dmitry/CLionProjects/OOP/ooop-19208/LaboratoryWorks/Lab_2/graphics/window.h
 string
 -
