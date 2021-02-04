@@ -2,6 +2,7 @@ package personal.bakunevich;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class WordReader {
     private final Reader reader;
@@ -34,7 +35,7 @@ public class WordReader {
             }
             else{
                 if (!stringBuilder.toString().equals("")){
-                    arrayOfStrings.add(stringBuilder.toString());
+                    arrayOfStrings.add(stringBuilder.toString().toUpperCase(Locale.ROOT));
                     stringBuilder = new StringBuilder();
                 }
             }

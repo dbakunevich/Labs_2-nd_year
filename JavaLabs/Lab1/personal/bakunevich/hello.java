@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class hello {
     public static void main(String[] args) {
-        String nameOfInFile = "/home/dmitry/Desktop/test/test.txt";
+        String nameOfInFile = "/home/dmitry/JavaProjects/ooop-19208/JavaLabs/Lab1/biblia.txt";
         if (args.length == 1 || args.length == 2){
             nameOfInFile = args[0];
         }
@@ -14,7 +14,7 @@ public class hello {
         if (args.length == 2){
             nameOfInFile = args[1];
         }
-        String nameOfOutFile = "/home/dmitry/Desktop/test/test.csv";
+        String nameOfOutFile = "/home/dmitry/JavaProjects/ooop-19208/JavaLabs/Lab1/test.csv";
 
         WordReader reader = null;
         WordWriter writer = null;
