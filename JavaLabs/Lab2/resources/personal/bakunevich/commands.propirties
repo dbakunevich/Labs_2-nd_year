@@ -1,0 +1,10 @@
+PUSH=personal.bakunevich.commands.Push
+POP=personal.bakunevich.commands.Pop
+#=personal.bakunevich.commands.Comment
++=personal.bakunevich.commands.Add
+-=personal.bakunevich.commands.Sub
+*=personal.bakunevich.commands.Mul
+/=personal.bakunevich.commands.Div
+SQRT=personal.bakunevich.commands.Sqrt
+PRINT=personal.bakunevich.commands.Print
+DEFINE=personal.bakunevich.commands.Define

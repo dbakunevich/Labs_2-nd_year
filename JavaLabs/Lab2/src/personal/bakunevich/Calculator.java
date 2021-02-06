@@ -12,44 +12,20 @@ public class Calculator {
         if (args.length == 1 || args.length == 2){
             nameOfInFile = args[0];
         }
+        else
+            nameOfInFile = null;
 
 //        System.out.println(nameOfInFile);
 //        if (args.length == 2){
 //            nameOfInFile = args[1];
 //        }
 //        String nameOfOutFile = "/home/dmitry/JavaProjects/ooop-19208/JavaLabs/Lab1/textOut.txt";
-        ReadFile readFile = null;
 
-        try {
-            readFile = new ReadFile(nameOfInFile);
-            readFile.readCommand();
+        try (CalculateExecuter mainWork = new CalculateExecuter(nameOfInFile)){
+            mainWork.run();
         }
         catch (IOException e){
             System.err.println("Error: " + e.getLocalizedMessage());
-        }
-        finally {
-            if (null != readFile)
-            {
-                try
-                {
-                    readFile.close();
-                }
-                catch (IOException e)
-                {
-                    e.printStackTrace(System.err);
-                }
-            }
-//            if (null != writer)
-//            {
-//                try
-//                {
-//                    writer.close();
-//                }
-//                catch (IOException e)
-//                {
-//                    e.printStackTrace(System.err);
-//                }
-//            }
         }
     }
 }
