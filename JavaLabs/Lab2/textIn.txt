@@ -1,1 +1,8 @@
-thsiFirstWord 2-ndWord 3-d
+PUSH 2
+PUSH 2
++
+PRINT
+PUSH 20
+SQRT
+PRINT
+# qwec123 123 mk23 12u3h 123h

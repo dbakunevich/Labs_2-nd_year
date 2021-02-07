@@ -27,8 +27,7 @@ public class Factory implements IFactory{
             Class<?> commandClass;
             try {
                 commandClass = Class.forName(bundle.getString(key));
-            }
-            catch (ClassNotFoundException e){
+            } catch (ClassNotFoundException e){
                 //log
                 throw new RuntimeException();
             }
@@ -55,8 +54,7 @@ public class Factory implements IFactory{
         Command cmd;
         try {
             cmd = commandClass.getDeclaredConstructor().newInstance();
-        }
-        catch (Exception e){
+        } catch (Exception e){
             //log
             throw new RuntimeException();
         }

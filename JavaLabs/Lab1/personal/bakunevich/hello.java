@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class hello {
     public static void main(String[] args) {
-        String nameOfInFile = "/home/dmitry/JavaProjects/ooop-19208/JavaLabs/Lab1/biblia.txt";
+        String nameOfInFile = "/home/dmitry/JavaProjects/ooop-19208/JavaLabs/Lab1/test.txt";
         if (args.length == 1 || args.length == 2){
             nameOfInFile = args[0];
         }

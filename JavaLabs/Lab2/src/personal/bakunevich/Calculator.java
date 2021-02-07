@@ -1,27 +1,22 @@
 package personal.bakunevich;
 
-
-import org.jetbrains.annotations.NotNull;
-
 import java.io.IOException;
 
 public class Calculator {
-    public static void main(String @NotNull [] args){
-
-        String nameOfInFile = "/home/dmitry/JavaProjects/ooop-19208/JavaLabs/Lab2/textIn.txt";
-        if (args.length == 1 || args.length == 2){
+    public static void main(String [] args) {
+        //textIn.txt
+        String nameOfInFile = null;
+        System.out.println();
+        String nameOfOutFile = null;
+        if (args.length == 1){
             nameOfInFile = args[0];
         }
-        else
-            nameOfInFile = null;
+        else if (args.length == 2){
+            nameOfInFile = args[0];
+            nameOfOutFile = args[1];
+        }
 
-//        System.out.println(nameOfInFile);
-//        if (args.length == 2){
-//            nameOfInFile = args[1];
-//        }
-//        String nameOfOutFile = "/home/dmitry/JavaProjects/ooop-19208/JavaLabs/Lab1/textOut.txt";
-
-        try (CalculateExecuter mainWork = new CalculateExecuter(nameOfInFile)){
+        try (CalculateExecuter mainWork = new CalculateExecuter(nameOfInFile, nameOfOutFile)){
             mainWork.run();
         }
         catch (IOException e){

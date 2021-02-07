@@ -1,5 +1,6 @@
 package personal.bakunevich;
 
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
@@ -7,36 +8,58 @@ import java.util.Stack;
 public class CommandContext implements ICommandContext {
     private final Stack<Double> stack = new Stack<>();
     private final Map<String, Double> defines = new HashMap<>();
+    private final PrintWriter writer;
 
-    @Override
-    public double peek() {
-        return stack.peek();
+    public CommandContext(PrintWriter writer) {
+        this.writer = writer;
     }
 
     @Override
-    public double pop() {
-        return stack.pop();
+    public PrintWriter getWriter() throws MyExceptions {
+        if (writer == null)
+            throw new MyExceptions("Can't open writing stream");
+        return writer;
     }
 
     @Override
-    public void push(double x) {
+    public double peek() throws MyExceptions {
+        if (stack.empty())
+            throw new MyExceptions("Stack is empty");
+        else
+            return stack.peek();
+    }
+
+    @Override
+    public double pop() throws MyExceptions {
+        if (stack.empty())
+            throw new MyExceptions("Stack is empty");
+        else
+            return stack.pop();
+    }
+
+    @Override
+    public void push(double x) throws MyExceptions {
+        if (Double.parseDouble(String.valueOf(x)) != x)
+            throw new MyExceptions("Can't push to stack");
         stack.push(x);
     }
 
     @Override
-    public double getDefine(String s) {
+    public double getDefine(String s) throws MyExceptions {
         Double tmp = defines.get(s);
-//        if (tmp == null)
-//            //log
-//            throw NullPointerException ;
-        return tmp;
+        if (tmp == null){
+            //log
+            throw new MyExceptions("I haven't this define");
+        }
+        else
+            return tmp;
     }
 
     @Override
-    public void addDefine(String s, double x) {
+    public void addDefine(String s, double x) throws MyExceptions {
         Double tmp = defines.put(s, x);
-//        if (tmp != null){
-//            throw Exception Log;daskjd lhao,h sofisduoircqw
-//        }
+        if (tmp != null){
+            throw new MyExceptions("I already have this defines, but I'll rewrite it for you)");
+        }
     }
 }

@@ -1,10 +1,24 @@
 package personal.bakunevich;
 
-public class MyExceptions {
-    private final Object NullPointerException = null;
+public class MyExceptions extends Exception{
 
-    public MyExceptions() throws Throwable {
-        assert false;
-        throw (Throwable) NullPointerException;
+    public MyExceptions() {
+        System.err.println("Unknown error");
+    }
+
+    public MyExceptions(String message) {
+        super(message);
+    }
+
+    public MyExceptions(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public MyExceptions(Throwable cause) {
+        super(cause);
+    }
+
+    public MyExceptions(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
     }
 }
