@@ -2,26 +2,26 @@ package personal.bakunevich;
 
 import java.io.*;
 import java.util.Arrays;
+import java.lang.System;
 
-public class CalculateExecuter implements AutoCloseable{
+public class CalculateExecutor implements AutoCloseable{
     private final LineNumberReader reader;
     private final IFactory factory = new Factory();
     private final ICommandContext context;
 
-    public CalculateExecuter(String nameOfInFile, String nameOfOutFile) throws IOException {
-        PrintWriter writer;
+    public CalculateExecutor(String nameOfInFile, String nameOfOutFile) throws IOException {
+        PrintStream writer;
 
         if(nameOfInFile != null && nameOfOutFile != null) {
             reader = new LineNumberReader(new BufferedReader(new FileReader(nameOfInFile)));
-            writer = new PrintWriter(new FileWriter(nameOfOutFile));
+            writer = new PrintStream(nameOfOutFile);
         } else if(nameOfInFile != null){
             reader = new LineNumberReader(new BufferedReader(new FileReader(nameOfInFile)));
-            writer = new PrintWriter(new OutputStreamWriter(System.out));
+            writer = new PrintStream(System.out);
         } else{
             reader = new LineNumberReader(new BufferedReader(new InputStreamReader(System.in)));
-            writer = new PrintWriter(new OutputStreamWriter(System.out));
+            writer = new PrintStream(System.out);
         }
-
         context = new CommandContext(writer);
     }
 
@@ -36,6 +36,7 @@ public class CalculateExecuter implements AutoCloseable{
             }
             currentString = reader.readLine();
         }
+
         try {
             context.getWriter().close();
         } catch (MyExceptions myExceptions) {
@@ -46,5 +47,4 @@ public class CalculateExecuter implements AutoCloseable{
     public void close() throws IOException {
         reader.close();
     }
-
 }

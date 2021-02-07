@@ -46,10 +46,10 @@ public class Factory implements IFactory{
     }
 
     @Override
-    public Command getCommand(String command) {
+    public Command getCommand(String command) throws MyExceptions {
         var commandClass = commandsMap.get(command);
         if (commandClass == null){
-            throw new RuntimeException();
+            throw new MyExceptions("Incorrect input command");
         }
         Command cmd;
         try {

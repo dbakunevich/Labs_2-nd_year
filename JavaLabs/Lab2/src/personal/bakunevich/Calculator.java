@@ -16,7 +16,7 @@ public class Calculator {
             nameOfOutFile = args[1];
         }
 
-        try (CalculateExecuter mainWork = new CalculateExecuter(nameOfInFile, nameOfOutFile)){
+        try (CalculateExecutor mainWork = new CalculateExecutor(nameOfInFile, nameOfOutFile)){
             mainWork.run();
         }
         catch (IOException e){

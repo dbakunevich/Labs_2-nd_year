@@ -20,7 +20,8 @@ public class Comment extends Command {
     private void write(ICommandContext context, Object[] args) throws IOException, MyExceptions {
         context.getWriter().print("#");
         for (var auto: args){
-            context.getWriter().print(String.format(" %s", auto));
+            context.getWriter().printf(" %s", auto);
         }
+        context.getWriter().print("\n");
     }
 }

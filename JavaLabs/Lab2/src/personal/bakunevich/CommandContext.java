@@ -1,6 +1,6 @@
 package personal.bakunevich;
 
-import java.io.PrintWriter;
+import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
@@ -8,14 +8,15 @@ import java.util.Stack;
 public class CommandContext implements ICommandContext {
     private final Stack<Double> stack = new Stack<>();
     private final Map<String, Double> defines = new HashMap<>();
-    private final PrintWriter writer;
+    private final PrintStream writer;
 
-    public CommandContext(PrintWriter writer) {
+
+    public CommandContext(PrintStream writer) {
         this.writer = writer;
     }
 
     @Override
-    public PrintWriter getWriter() throws MyExceptions {
+    public PrintStream getWriter() throws MyExceptions{
         if (writer == null)
             throw new MyExceptions("Can't open writing stream");
         return writer;
