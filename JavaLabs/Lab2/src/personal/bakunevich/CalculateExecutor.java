@@ -1,5 +1,11 @@
 package personal.bakunevich;
 
+import personal.bakunevich.commandContext.CommandContext;
+import personal.bakunevich.commandContext.ICommandContext;
+import personal.bakunevich.exeptions.MyExceptions;
+import personal.bakunevich.factory.Factory;
+import personal.bakunevich.factory.IFactory;
+
 import java.io.*;
 import java.util.Arrays;
 import java.lang.System;
@@ -25,9 +31,13 @@ public class CalculateExecutor implements AutoCloseable{
         context = new CommandContext(writer);
     }
 
-    public void run() throws IOException {
+    public void run() throws IOException, MyExceptions {
+        context.getWriter().print("""
+                Please write "EXIT" or press "ENTER"
+                If you want close this calculator
+                """);
         String currentString = reader.readLine();
-        while (currentString != null && !currentString.equals("")){
+        while (currentString != null && !currentString.equals("") && !currentString.equals("EXIT")){
             String[] nowLine = currentString.split(" ");
             try {
                 factory.getCommand(nowLine[0]).execute(context, Arrays.copyOfRange(nowLine, 1, nowLine.length));

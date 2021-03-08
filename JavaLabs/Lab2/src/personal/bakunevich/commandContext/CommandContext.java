@@ -1,4 +1,6 @@
-package personal.bakunevich;
+package personal.bakunevich.commandContext;
+
+import personal.bakunevich.exeptions.MyExceptions;
 
 import java.io.PrintStream;
 import java.util.HashMap;
@@ -16,7 +18,7 @@ public class CommandContext implements ICommandContext {
     }
 
     @Override
-    public PrintStream getWriter() throws MyExceptions{
+    public PrintStream getWriter() throws MyExceptions {
         if (writer == null)
             throw new MyExceptions("Can't open writing stream");
         return writer;

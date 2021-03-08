@@ -1,5 +1,7 @@
 package personal.bakunevich;
 
+import personal.bakunevich.exeptions.MyExceptions;
+
 import java.io.IOException;
 
 public class Calculator {
@@ -19,7 +21,7 @@ public class Calculator {
         try (CalculateExecutor mainWork = new CalculateExecutor(nameOfInFile, nameOfOutFile)){
             mainWork.run();
         }
-        catch (IOException e){
+        catch (IOException | MyExceptions e){
             System.err.println("Error: " + e.getLocalizedMessage());
         }
     }

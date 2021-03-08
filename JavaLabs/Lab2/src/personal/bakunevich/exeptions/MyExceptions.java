@@ -1,4 +1,4 @@
-package personal.bakunevich;
+package personal.bakunevich.exeptions;
 
 public class MyExceptions extends Exception{
 

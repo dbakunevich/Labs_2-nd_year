@@ -1,17 +1,17 @@
 package personal.bakunevich.commands;
 
-import personal.bakunevich.Command;
-import personal.bakunevich.ICommandContext;
-import personal.bakunevich.MyExceptions;
+import personal.bakunevich.commandContext.ICommandContext;
+import personal.bakunevich.exeptions.ArgsException;
+import personal.bakunevich.exeptions.MyExceptions;
 
 public class Push extends Command {
     @Override
     public void execute(ICommandContext context, Object[] args) throws MyExceptions {
         if (args.length == 0){
-            throw new MyExceptions("PUSH without arguments");
+            throw new ArgsException("PUSH without arguments");
         }
         else if (args.length >= 2){
-            throw new MyExceptions("More them I need arguments");
+            throw new ArgsException("More them I need arguments");
         }
         else {
             var tmp = args[0].toString();

@@ -1,8 +1,7 @@
 package personal.bakunevich.commands;
 
-import personal.bakunevich.Command;
-import personal.bakunevich.ICommandContext;
-import personal.bakunevich.MyExceptions;
+import personal.bakunevich.commandContext.ICommandContext;
+import personal.bakunevich.exeptions.MyExceptions;
 
 import java.io.IOException;
 

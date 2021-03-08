@@ -1,4 +1,7 @@
-package personal.bakunevich;
+package personal.bakunevich.factory;
+
+import personal.bakunevich.commands.Command;
+import personal.bakunevich.exeptions.MyExceptions;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,7 +10,7 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.PropertyResourceBundle;
 
-public class Factory implements IFactory{
+public class Factory implements IFactory {
     private final Map<String, Class<? extends Command>> commandsMap = new HashMap<>();
 
     public Factory() {
