@@ -19,6 +19,8 @@ public abstract class Display {
 
     private static BufferStrategy bufferStrategy;
 
+
+
     public static void create(int width, int height, String title, int __clearColor, int numBuffers) {
 
         if (isCreated) return;
@@ -66,6 +68,10 @@ public abstract class Display {
         if (!isCreated) return;
 
         window.dispose();
+    }
+
+    public static void setTitle(String title) {
+        window.setTitle(title);
     }
 }
 
