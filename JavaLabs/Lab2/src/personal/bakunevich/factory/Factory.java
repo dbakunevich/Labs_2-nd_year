@@ -11,7 +11,7 @@ import java.util.MissingResourceException;
 import java.util.PropertyResourceBundle;
 
 public class Factory implements IFactory {
-    private final Map<String, Class<? extends Command>> commandsMap = new HashMap<>();
+    private final Map<String, Class<?>> commandsMap = new HashMap<>();
 
     public Factory() {
         InputStream propIn = getClass().getResourceAsStream("commands.properties");
@@ -36,7 +36,7 @@ public class Factory implements IFactory {
             }
 
             if (commandClass.getSuperclass() == Command.class) {
-                commandsMap.put(key, (Class<? extends Command>) commandClass);
+                commandsMap.put(key, commandClass);
             }
 
         }
@@ -56,7 +56,7 @@ public class Factory implements IFactory {
         }
         Command cmd;
         try {
-            cmd = commandClass.getDeclaredConstructor().newInstance();
+            cmd = (Command) commandClass.getDeclaredConstructor().newInstance();
         } catch (Exception e){
             //log
             throw new RuntimeException();

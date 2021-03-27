@@ -1,5 +1,6 @@
 package personal.bakunevich.commandContext;
 
+import personal.bakunevich.exeptions.ContextExeptions;
 import personal.bakunevich.exeptions.MyExceptions;
 
 import java.io.PrintStream;
@@ -20,14 +21,14 @@ public class CommandContext implements ICommandContext {
     @Override
     public PrintStream getWriter() throws MyExceptions {
         if (writer == null)
-            throw new MyExceptions("Can't open writing stream");
+            throw new ContextExeptions("Can't open writing stream");
         return writer;
     }
 
     @Override
     public double peek() throws MyExceptions {
         if (stack.empty())
-            throw new MyExceptions("Stack is empty");
+            throw new ContextExeptions("Stack is empty");
         else
             return stack.peek();
     }
@@ -35,7 +36,7 @@ public class CommandContext implements ICommandContext {
     @Override
     public double pop() throws MyExceptions {
         if (stack.empty())
-            throw new MyExceptions("Stack is empty");
+            throw new ContextExeptions("Stack is empty");
         else
             return stack.pop();
     }
@@ -43,7 +44,7 @@ public class CommandContext implements ICommandContext {
     @Override
     public void push(double x) throws MyExceptions {
         if (Double.parseDouble(String.valueOf(x)) != x)
-            throw new MyExceptions("Can't push to stack");
+            throw new ContextExeptions("Can't push to stack");
         stack.push(x);
     }
 
@@ -52,7 +53,7 @@ public class CommandContext implements ICommandContext {
         Double tmp = defines.get(s);
         if (tmp == null){
             //log
-            throw new MyExceptions("I haven't this define");
+            throw new ContextExeptions("I haven't this define");
         }
         else
             return tmp;
@@ -62,7 +63,7 @@ public class CommandContext implements ICommandContext {
     public void addDefine(String s, double x) throws MyExceptions {
         Double tmp = defines.put(s, x);
         if (tmp != null){
-            throw new MyExceptions("I already have this defines, but I'll rewrite it for you)");
+            throw new ContextExeptions("I already have this defines, but I'll rewrite it for you)");
         }
     }
 }
