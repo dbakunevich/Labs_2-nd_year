@@ -1,8 +1,20 @@
 personal/bakunevich/display/Display.java
  personal.bakunevich.display.Display
+personal/bakunevich/utils/ResourcesLoader.java
+ personal.bakunevich.utils.ResourcesLoader
+personal/bakunevich/graphics/SpriteSheet.java
+ personal.bakunevich.graphics.SpriteSheet
 personal/bakunevich/utils/Time.java
  personal.bakunevich.utils.Time
+personal/bakunevich/graphics/Sprite.java
+ personal.bakunevich.graphics.Sprite
 personal/bakunevich/game/Game.java
  personal.bakunevich.game.Game
+personal/bakunevich/IO/Input.java
+ personal.bakunevich.IO.Input
+ personal.bakunevich.IO.Input$1
+ personal.bakunevich.IO.Input$2
+personal/bakunevich/graphics/TextureAtlas.java
+ personal.bakunevich.graphics.TextureAtlas
 personal/bakunevich/MainWork.java
  personal.bakunevich.MainWork
