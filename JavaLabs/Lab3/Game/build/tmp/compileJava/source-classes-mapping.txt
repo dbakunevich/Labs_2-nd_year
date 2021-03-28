@@ -1,13 +1,14 @@
+personal/bakunevich/game/Player.java
+ personal.bakunevich.game.Player
+ personal.bakunevich.game.Player$Heading
+personal/bakunevich/game/level/Tile.java
+ personal.bakunevich.game.level.Tile
 personal/bakunevich/display/Display.java
  personal.bakunevich.display.Display
-personal/bakunevich/utils/ResourcesLoader.java
- personal.bakunevich.utils.ResourcesLoader
-personal/bakunevich/graphics/SpriteSheet.java
- personal.bakunevich.graphics.SpriteSheet
 personal/bakunevich/utils/Time.java
  personal.bakunevich.utils.Time
-personal/bakunevich/graphics/Sprite.java
- personal.bakunevich.graphics.Sprite
+personal/bakunevich/game/level/TileType.java
+ personal.bakunevich.game.level.TileType
 personal/bakunevich/game/Game.java
  personal.bakunevich.game.Game
 personal/bakunevich/IO/Input.java
@@ -16,5 +17,19 @@ personal/bakunevich/IO/Input.java
  personal.bakunevich.IO.Input$2
 personal/bakunevich/graphics/TextureAtlas.java
  personal.bakunevich.graphics.TextureAtlas
+personal/bakunevich/game/level/Level.java
+ personal.bakunevich.game.level.Level
 personal/bakunevich/MainWork.java
  personal.bakunevich.MainWork
+personal/bakunevich/utils/ResourcesLoader.java
+ personal.bakunevich.utils.ResourcesLoader
+personal/bakunevich/game/Entity.java
+ personal.bakunevich.game.Entity
+personal/bakunevich/graphics/SpriteSheet.java
+ personal.bakunevich.graphics.SpriteSheet
+personal/bakunevich/game/EntityType.java
+ personal.bakunevich.game.EntityType
+personal/bakunevich/graphics/Sprite.java
+ personal.bakunevich.graphics.Sprite
+personal/bakunevich/utils/Utils.java
+ personal.bakunevich.utils.Utils

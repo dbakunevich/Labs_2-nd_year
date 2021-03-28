@@ -23,14 +23,14 @@ public abstract class Display {
 
 
 
-    public static void create(int width, int height, String title, int __clearColor, int numBuffers) {
+    public static void create(int wight, int height, String title, int __clearColor, int numBuffers) {
 
         if (isCreated) return;
 
         window = new JFrame(title);
         content = new Canvas();
 
-        Dimension size = new Dimension(width, height);
+        Dimension size = new Dimension(wight, height);
         content.setPreferredSize(size);
 
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -40,7 +40,7 @@ public abstract class Display {
         window.setLocationRelativeTo(null);
         window.setVisible(true);
 
-        bufferImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        bufferImage = new BufferedImage(wight, height, BufferedImage.TYPE_INT_ARGB);
         bufferData = ((DataBufferInt) bufferImage.getRaster().getDataBuffer()).getData();
         bufferGraphics = bufferImage.getGraphics();
         ((Graphics2D) bufferGraphics).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -80,22 +80,3 @@ public abstract class Display {
         window.add(inputListener);
     }
 }
-
-
-
-
-
-
-
-
-
-
-/*public static void render() {
-        bufferGraphics.setColor(new Color(0xff0000ff));
-        bufferGraphics.fillOval((int) (400 - 50 + Math.sin(delta) * 200), 400 - 50, 100, 100);
-        //delta += 0.02f;
-
-        ((Graphics2D) bufferGraphics).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        bufferGraphics.fillOval((int) (400 - 50 + Math.sin(delta) * 200), 400 - 150, 100, 100);
-        ((Graphics2D) bufferGraphics).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-    }*/

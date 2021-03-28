@@ -2,23 +2,21 @@ package personal.bakunevich.game;
 
 import personal.bakunevich.IO.Input;
 import personal.bakunevich.display.Display;
-import personal.bakunevich.graphics.Sprite;
-import personal.bakunevich.graphics.SpriteSheet;
+import personal.bakunevich.game.level.Level;
 import personal.bakunevich.graphics.TextureAtlas;
 import personal.bakunevich.utils.Time;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
 
 public class Game implements Runnable {
 
-    public static final int     WIGHT           = 800;
-    public static final int     HEIGHT          = 800;
+    public static final int     WIDHT           = 1024;
+    public static final int     HEIGHT          = 1024;
     public static final String  TITLE           = "Dima";
     public static final int     CLEAR_COLOR     = 0xff000000;
     public static final int     NUM_BUFFERS     = 3;
 
-    public static final float   UPDATE_RATE     = 120.0f;
+    public static final float   UPDATE_RATE     = 90.0f;
     public static final float   UPDATE_INTERVAL = Time.SECOND / UPDATE_RATE;
     public static final short   IDLE_TIME       = 1;
 
@@ -27,14 +25,14 @@ public class Game implements Runnable {
     private boolean             isRun;
     private Thread              gameThread;
     private final Graphics2D    graphics;
-    private Input               input;
+    private final Input               input;
     private TextureAtlas        atlas;
-    private SpriteSheet         sheet;
-    private Sprite              sprite;
+    private final Player              player;
+    private final Level               level;
 
     //tmp
-    float x = 400;
-    float y = 400;
+    float x = WIDHT / 2 - 100.0f;
+    float y = HEIGHT / 2 - 100.0f;
     float d = 0;
     float r = 50;
 
@@ -43,13 +41,14 @@ public class Game implements Runnable {
 
     public Game() {
         isRun = false;
-        Display.create(WIGHT, HEIGHT, TITLE, CLEAR_COLOR, NUM_BUFFERS);
+        Display.create(WIDHT, HEIGHT, TITLE, CLEAR_COLOR, NUM_BUFFERS);
         graphics = Display.getGraphics();
         input = new Input();
         Display.addInputListener(input);
         atlas = new TextureAtlas(ATLAS_FILE_NAME);
-        sheet = new SpriteSheet(atlas.cut(1 * 16, 9 * 16, 16, 16), 2, 16);
-        sprite = new Sprite(sheet, 4);
+        player = new Player(x - 50, y + 330, 4, 3, atlas);
+        level = new Level(atlas);
+
     }
 
     public synchronized void start() {
@@ -76,21 +75,16 @@ public class Game implements Runnable {
     }
 
     private void update() {
-        if (input.getKey(KeyEvent.VK_UP))
-            y -= speed;
-        if (input.getKey(KeyEvent.VK_DOWN))
-            y += speed;
-        if (input.getKey(KeyEvent.VK_RIGHT))
-            x += speed;
-        if (input.getKey(KeyEvent.VK_LEFT))
-            x -= speed;
-        //d += 0.01f;
+        player.update(input, level);
+        level.update();
     }
 
     private void render() {
         Display.clear();
 
-        sprite.render(graphics, x, y);
+        player.render(graphics);
+        level.render(graphics);
+        level.renderGrass(graphics);
 
         Display.swapBuffers();
     }
