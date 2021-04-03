@@ -1,4 +1,4 @@
-package personal.bakunevich.game;
+package personal.bakunevich.game.entity;
 
 import personal.bakunevich.IO.Input;
 import personal.bakunevich.game.level.Level;
@@ -7,21 +7,21 @@ import personal.bakunevich.graphics.SpriteSheet;
 import personal.bakunevich.graphics.TextureAtlas;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Player extends Entity{
-
+public class Bullet extends Entity{
     public static final int SPRITE_SCALE = 16;
+    public static final int BULLET_SCALE = 8;
     public static final int SPRITES_COUNT = 1;
+    public static final int BULLET_SPEED = 10;
 
     private enum Heading{
-        NORTH(0 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 * SPRITE_SCALE),
-        EAST(6 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 * SPRITE_SCALE),
-        SOUTH(4 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 *SPRITE_SCALE),
-        WEST(2 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 * SPRITE_SCALE);
+        NORTH(20 * SPRITE_SCALE, 6 * SPRITE_SCALE, 1 * BULLET_SCALE, 1 * SPRITE_SCALE),
+        EAST(20 * SPRITE_SCALE, 6 * SPRITE_SCALE + BULLET_SCALE, 1 * BULLET_SCALE, 1 * SPRITE_SCALE),
+        SOUTH(21 * SPRITE_SCALE, 6 * SPRITE_SCALE, 1 * BULLET_SCALE, 1 *SPRITE_SCALE),
+        WEST(21 * SPRITE_SCALE, 6 * SPRITE_SCALE + BULLET_SCALE, 1 * BULLET_SCALE, 1 * SPRITE_SCALE);
 
         private int x, y, weight, height;
 
@@ -36,17 +36,13 @@ public class Player extends Entity{
             return atlas.cut(x, y, weight, height);
         }
     }
-
     private Heading                 heading;
-    private Map<Heading, Sprite>    spriteMap;
+    private Map<Heading, Sprite> spriteMap;
     private float                   scale;
-    private float                   speed;
-
-    public Player (float x, float y, float scale, float speed, TextureAtlas atlas) {
-        super(EntityType.Player, x, y);
+    
+    public Bullet(EntityType type, float x, float y, float scale, TextureAtlas atlas) {
+        super(EntityType.Bullet, x, y);
         this.scale = scale;
-        this.speed = speed;
-
         heading = Heading.NORTH;
         spriteMap = new HashMap<Heading, Sprite>();
 
@@ -56,7 +52,19 @@ public class Player extends Entity{
             spriteMap.put(heading, sprite);
         }
     }
+
     @Override
+    public void update(Input input, Level level) {
+
+    }
+
+    @Override
+    public void render(Graphics2D graphics) {
+
+    }
+}
+
+/*    @Override
     public void update(Input input, Level level) {
 
         float newX = x;
@@ -91,7 +99,7 @@ public class Player extends Entity{
                 break;
             }
 
-            if (level.collisionObjects(newX, newY)) {
+            if (CollisionObjects.collisionObjects(newX, newY)) {
                 newX = x;
                 newY = y;
             }
@@ -104,4 +112,5 @@ public class Player extends Entity{
     public void render(Graphics2D graphics) {
         spriteMap.get(heading).render(graphics, x, y);
     }
-}
+}*/
+

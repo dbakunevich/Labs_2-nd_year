@@ -12,13 +12,14 @@ import java.util.Map;
 public class Level {
 
     public static final int     TILE_SCALE = 16;
+
     public static final int     TILE_IN_GAME_SCALE = 4;
     public static final int     SCALED_TILE_SIZE = TILE_SCALE * TILE_IN_GAME_SCALE;
     public static final int     TILES_IN_WIDHT = Game.WIDHT / SCALED_TILE_SIZE;
     public static final int     TILES_IN_HEIGHT = Game.HEIGHT / SCALED_TILE_SIZE;
 
-    private final Map<TileType, Tile> tiles;
-    private final Integer[][]         tileMap;
+    private static Map<TileType, Tile> tiles;
+    private static Integer[][]         tileMap;
     private final ArrayList<Point>    grassCoords;
 
     public Level(TextureAtlas atlas) {
@@ -68,25 +69,36 @@ public class Level {
         }
     }
 
-    private boolean isBadTile(Tile tile) {
-        return tile.type().numeric() == TileType.METAL.numeric() ||
-               tile.type().numeric() == TileType.WATER.numeric() ||
-               tile.type().numeric() == TileType.BRICK.numeric();
+    public static Map<TileType, Tile> getTiles() {
+        return tiles;
     }
 
-    public boolean collisionObjects(float x, float y){
-
-        int newX1 =  (int) (x + 2) / SCALED_TILE_SIZE;
-        int newY1 =  (int) (y + 2) / SCALED_TILE_SIZE;
-        int newX2 = Math.min(15, (int) (x + SCALED_TILE_SIZE - 2) / SCALED_TILE_SIZE);
-        int newY2 = Math.min(15, (int) (y + SCALED_TILE_SIZE - 2) / SCALED_TILE_SIZE);
-        Tile tile1 = tiles.get(TileType.fromNumeric(tileMap[newY1][newX1]));
-        Tile tile2 = tiles.get(TileType.fromNumeric(tileMap[newY1][newX2]));
-        Tile tile3 = tiles.get(TileType.fromNumeric(tileMap[newY2][newX1]));
-        Tile tile4 = tiles.get(TileType.fromNumeric(tileMap[newY2][newX2]));
-
-        return isBadTile(tile1) || isBadTile(tile2) || isBadTile(tile3) || isBadTile(tile4);
+    public static Integer[][] getTileMap() {
+        return tileMap;
     }
 
-
+    public static float getPositionPlayer_X(){
+        float x = 0;
+        for (Integer[] integers : tileMap) {
+            for (int j = 0; j < integers.length; j++) {
+                if (integers[j] == 9) {
+                    x = j * SCALED_TILE_SIZE;
+                    break;
+                }
+            }
+        }
+        return x;
+    }
+    public static float getPositionPlayer_Y(){
+        float y = 0;
+        for (int i = 0; i < tileMap.length; i++){
+            for (int j = 0; j < tileMap[i].length; j++){
+                if (tileMap[i][j] == 9) {
+                    y = i * SCALED_TILE_SIZE;
+                    break;
+                }
+            }
+        }
+        return y;
+    }
 }

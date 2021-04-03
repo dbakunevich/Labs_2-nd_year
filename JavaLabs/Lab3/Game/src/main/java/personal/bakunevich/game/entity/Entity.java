@@ -1,4 +1,4 @@
-package personal.bakunevich.game;
+package personal.bakunevich.game.entity;
 
 import personal.bakunevich.IO.Input;
 import personal.bakunevich.game.level.Level;
@@ -13,6 +13,7 @@ public abstract class Entity {
     protected float         y;
 
     public Entity(EntityType type, float x, float y) {
+        System.out.printf("POSITION X = %f, POSITION Y = %f", x, y);
         this.type = type;
         this.x = x;
         this.y = y;

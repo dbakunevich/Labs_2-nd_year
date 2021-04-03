@@ -2,6 +2,8 @@ package personal.bakunevich.game;
 
 import personal.bakunevich.IO.Input;
 import personal.bakunevich.display.Display;
+import personal.bakunevich.game.entity.Player;
+import personal.bakunevich.game.level.CollisionObjects;
 import personal.bakunevich.game.level.Level;
 import personal.bakunevich.graphics.TextureAtlas;
 import personal.bakunevich.utils.Time;
@@ -25,10 +27,12 @@ public class Game implements Runnable {
     private boolean             isRun;
     private Thread              gameThread;
     private final Graphics2D    graphics;
-    private final Input               input;
+    private final Input         input;
     private TextureAtlas        atlas;
-    private final Player              player;
-    private final Level               level;
+    private final Player player;
+    private final Level         level;
+    private final CollisionObjects collisionObjects;
+    //private ArrayList<Bullet>   bullets;
 
     //tmp
     float x = WIDHT / 2 - 100.0f;
@@ -46,8 +50,10 @@ public class Game implements Runnable {
         input = new Input();
         Display.addInputListener(input);
         atlas = new TextureAtlas(ATLAS_FILE_NAME);
-        player = new Player(x - 50, y + 330, 4, 3, atlas);
         level = new Level(atlas);
+        player = new Player(Level.getPositionPlayer_X(), Level.getPositionPlayer_Y(), 4, 3, atlas);
+        collisionObjects = new CollisionObjects();
+        //bullets.set(0, new Bullet(EntityType.Bullet, x, y, 4, atlas));
 
     }
 
