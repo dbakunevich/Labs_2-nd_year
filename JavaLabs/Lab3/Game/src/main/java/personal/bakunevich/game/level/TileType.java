@@ -6,7 +6,9 @@ public enum TileType {
     BRICK (1),
     METAL (2),
     GRASS (3),
-    WATER (4),
+    WATER_1(4),
+    WATER_2(4),
+    WATER_3(4),
     ICE (5);
 
     private int n;
@@ -24,7 +26,7 @@ public enum TileType {
             case 1 -> BRICK;
             case 2 -> METAL;
             case 3 -> GRASS;
-            case 4 -> WATER;
+            case 4 -> WATER_1;
             case 5 -> ICE;
             default -> EMPTY;
         };

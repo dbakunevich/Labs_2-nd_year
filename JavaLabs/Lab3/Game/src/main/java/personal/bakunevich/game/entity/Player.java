@@ -20,24 +20,29 @@ public class Player extends Entity{
     public static final int SPRITES_COUNT = 1;
 
     private enum Heading{
-        NORTH_1(0 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 * SPRITE_SCALE),
-        EAST_1(6 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 * SPRITE_SCALE),
-        SOUTH_1(4 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 *SPRITE_SCALE),
-        WEST_1(2 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 * SPRITE_SCALE),
+        NORTH_1(0 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1),
+        EAST_1(6 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 * SPRITE_SCALE, 2),
+        SOUTH_1(4 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 *SPRITE_SCALE, 3),
+        WEST_1(2 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 * SPRITE_SCALE, 4),
 
-        NORTH_2(1 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 * SPRITE_SCALE),
-        EAST_2(7 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 * SPRITE_SCALE),
-        SOUTH_2(5 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 *SPRITE_SCALE),
-        WEST_2(3 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 * SPRITE_SCALE);
+        NORTH_2(1 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1),
+        EAST_2(7 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 * SPRITE_SCALE, 2),
+        SOUTH_2(5 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 *SPRITE_SCALE, 3),
+        WEST_2(3 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 * SPRITE_SCALE, 4);
 
 
-        private final int x, y, weight, height;
+        private final int x, y, weight, height, n;
 
-        Heading(int x, int y, int weight, int height){
+        Heading(int x, int y, int weight, int height, int n){
             this.x = x;
             this.y = y;
             this.weight = weight;
             this.height = height;
+            this.n = n;
+        }
+
+        public int numeric() {
+            return n;
         }
 
         protected BufferedImage texture(TextureAtlas atlas) {
@@ -50,6 +55,8 @@ public class Player extends Entity{
     private float                   scale;
     private float                   speed;
 
+
+
     public Player (float x, float y, float scale, float speed, TextureAtlas atlas) {
         super(EntityType.Player, x, y);
 
@@ -57,7 +64,7 @@ public class Player extends Entity{
         this.speed = speed;
 
         heading = Heading.NORTH_1;
-        spriteMap = new HashMap<Heading, Sprite>();
+        spriteMap = new HashMap<>();
 
         for (Heading heading : Heading.values()) {
             SpriteSheet sheet = new SpriteSheet(heading.texture(atlas), SPRITES_COUNT, SPRITE_SCALE);
@@ -98,7 +105,10 @@ public class Player extends Entity{
                     heading = Heading.WEST_2;
             }
             if (input.getKey(KeyEvent.VK_SPACE)){
-                //bullet.update(input, level);
+                if (!Game.checkBullet(EntityType.Player)) {
+                    Bullet bullet = new Bullet(x + SPRITE_SCALE + 4, y + SPRITE_SCALE + 4, 5, speed * 2, Game.atlas, heading.numeric());
+                    Game.addBullet(EntityType.Player, bullet);
+                }
             }
             if (newX < 0) {
                 newX = 0;
@@ -115,9 +125,10 @@ public class Player extends Entity{
                 break;
             }
 
-            if (CollisionObjects.collisionObjects(newX, newY)) {
+            if (CollisionObjects.collisionTanks(newX, newY)) {
                 newX = x;
                 newY = y;
+                break;
             }
 
             x = newX;
@@ -127,6 +138,5 @@ public class Player extends Entity{
     @Override
     public void render(Graphics2D graphics) {
         spriteMap.get(heading).render(graphics, x, y);
-        //spriteMap.get(Bullet).render(graphics, x, y);
     }
 }

@@ -2,6 +2,8 @@ package personal.bakunevich.game;
 
 import personal.bakunevich.IO.Input;
 import personal.bakunevich.display.Display;
+import personal.bakunevich.game.entity.Bullet;
+import personal.bakunevich.game.entity.EntityType;
 import personal.bakunevich.game.entity.Player;
 import personal.bakunevich.game.level.CollisionObjects;
 import personal.bakunevich.game.level.Level;
@@ -9,6 +11,9 @@ import personal.bakunevich.graphics.TextureAtlas;
 import personal.bakunevich.utils.Time;
 
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class Game implements Runnable {
 
@@ -18,7 +23,7 @@ public class Game implements Runnable {
     public static final int     CLEAR_COLOR     = 0xff000000;
     public static final int     NUM_BUFFERS     = 3;
 
-    public static final float   UPDATE_RATE     = 90.0f;
+    public static final float   UPDATE_RATE     = 80.0f;
     public static final float   UPDATE_INTERVAL = Time.SECOND / UPDATE_RATE;
     public static final short   IDLE_TIME       = 1;
 
@@ -28,11 +33,11 @@ public class Game implements Runnable {
     private Thread              gameThread;
     private final Graphics2D    graphics;
     private final Input         input;
-    private TextureAtlas        atlas;
+    public   static TextureAtlas        atlas;
     private final Player player;
     private final Level         level;
     private final CollisionObjects collisionObjects;
-    //private ArrayList<Bullet>   bullets;
+    private static Map<EntityType, Bullet> bullets;
 
     //tmp
     float x = WIDHT / 2 - 100.0f;
@@ -53,9 +58,18 @@ public class Game implements Runnable {
         level = new Level(atlas);
         player = new Player(Level.getPositionPlayer_X(), Level.getPositionPlayer_Y(), 4, 3, atlas);
         collisionObjects = new CollisionObjects();
-        //bullets.set(0, new Bullet(EntityType.Bullet, x, y, 4, atlas));
+        bullets = new HashMap<>();
 
     }
+
+    public static void addBullet(EntityType entity, Bullet bullet){
+        bullets.put(entity, bullet);
+    }
+
+    public static boolean checkBullet(EntityType entity){
+        return bullets.containsKey(entity);
+    }
+
 
     public synchronized void start() {
 
@@ -83,6 +97,19 @@ public class Game implements Runnable {
     private void update() {
         player.update(input, level);
         level.update();
+        if (bullets.size() != 0) {
+            for (Iterator<Map.Entry<EntityType, Bullet>> iterator = bullets.entrySet().iterator();
+                iterator.hasNext();){
+                synchronized (iterator) {
+                    Map.Entry<EntityType, Bullet> entry = iterator.next();
+                    Bullet bullet = entry.getValue();
+                    if (bullet.isLife())
+                        bullet.update(input, level);
+                    else
+                        iterator.remove();
+                }
+            }
+        }
     }
 
     private void render() {
@@ -90,6 +117,11 @@ public class Game implements Runnable {
 
         player.render(graphics);
         level.render(graphics);
+        level.renderWater(graphics);
+
+        if (bullets.size() != 0)
+            bullets.forEach((type, x) -> x.render(graphics));
+
         level.renderGrass(graphics);
 
         Display.swapBuffers();

@@ -14,7 +14,7 @@ public class Sprite {
     public Sprite(SpriteSheet sheet, float scale) {
         this.sheet = sheet;
         this.scale = scale;
-        image = sheet.getSprite(0);
+        image = sheet.getSprite(1);
         image = Utils.resize(image, (int) scale * image.getWidth(), (int) scale * image.getHeight());
     }
 
