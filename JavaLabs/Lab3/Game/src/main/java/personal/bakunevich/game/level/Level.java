@@ -19,18 +19,18 @@ public class Level {
     public static final int     TILES_IN_WIDHT = Game.WIDHT / SCALED_TILE_SIZE;
     public static final int     TILES_IN_HEIGHT = Game.HEIGHT / SCALED_TILE_SIZE;
 
-    private static Map<TileType, Tile>  tiles;
-    private static Integer[][]          tileMap;
-    private final ArrayList<Point>      grassCoords;
-    private final ArrayList<Point>      waterCoords;
-    private TileType                    waterType;
-    private Timer                       timer;
+    private static Map<TileType, Tile>          tiles;
+    private static Integer[][]                  tileMap;
+    private final ArrayList<Point>              grassCoords;
+    private final ArrayList<Point>              waterCoords;
+    private TileType                            waterType;
+    private final Timer                         timer;
 
     public Level(TextureAtlas atlas) {
         tiles = new HashMap<>();
-        tiles.put(TileType.BRICK, new Tile(atlas.cut(16 * TILE_SCALE, 0 * TILE_SCALE, TILE_SCALE, TILE_SCALE),
+        tiles.put(TileType.BRICK, new Tile(atlas.cut(16 * TILE_SCALE, 0, TILE_SCALE, TILE_SCALE),
                     TILE_IN_GAME_SCALE, TileType.BRICK));
-        tiles.put(TileType.METAL, new Tile(atlas.cut(16 * TILE_SCALE, 1 * TILE_SCALE, TILE_SCALE, TILE_SCALE),
+        tiles.put(TileType.METAL, new Tile(atlas.cut(16 * TILE_SCALE, TILE_SCALE, TILE_SCALE, TILE_SCALE),
                 TILE_IN_GAME_SCALE, TileType.METAL));
         tiles.put(TileType.GRASS, new Tile(atlas.cut(17 * TILE_SCALE, 2 * TILE_SCALE, TILE_SCALE, TILE_SCALE),
                 TILE_IN_GAME_SCALE, TileType.GRASS));

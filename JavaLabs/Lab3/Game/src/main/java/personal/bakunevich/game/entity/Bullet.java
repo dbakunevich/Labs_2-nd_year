@@ -19,15 +19,12 @@ public class Bullet extends Entity{
     public static final int SPRITES_COUNT = 1;
 
     private enum Heading{
-        NORTH(20 * SPRITE_SCALE + 3, 6 * SPRITE_SCALE + 6, BULLET_SCALE, BULLET_SCALE),
-        EAST(21 * SPRITE_SCALE + 10, 6 * SPRITE_SCALE + 6, BULLET_SCALE, BULLET_SCALE),
-        SOUTH(21 * SPRITE_SCALE + 3, 6 * SPRITE_SCALE + 6, BULLET_SCALE, BULLET_SCALE),
-        WEST(20 * SPRITE_SCALE + 10, 6 * SPRITE_SCALE + 6, BULLET_SCALE, BULLET_SCALE);
+        NORTH(20 * SPRITE_SCALE + 3, 6 * SPRITE_SCALE + 6, 1 * BULLET_SCALE, 1 * BULLET_SCALE),
+        EAST(21 * SPRITE_SCALE + 10, 6 * SPRITE_SCALE + 6, 1 * BULLET_SCALE, 1 * BULLET_SCALE),
+        SOUTH(21 * SPRITE_SCALE + 3, 6 * SPRITE_SCALE + 6, 1 * BULLET_SCALE, 1 *BULLET_SCALE),
+        WEST(20 * SPRITE_SCALE + 10, 6 * SPRITE_SCALE + 6, 1 * BULLET_SCALE, 1 * BULLET_SCALE);
 
-        private final int x;
-        private final int y;
-        private final int weight;
-        private final int height;
+        private int x, y, weight, height;
 
         Heading(int x, int y, int weight, int height){
             this.x = x;
@@ -40,12 +37,12 @@ public class Bullet extends Entity{
             return atlas.cut(x, y, weight, height);
         }
     }
-    private Heading                         heading;
-    private final Map<Heading, Sprite>      spriteMap;
-    private final float                     scale;
-    private final float                     speed;
-    private final int                       bulletHeading;
-    private boolean                         iAmLife;
+    private Heading                 heading;
+    private Map<Heading, Sprite>    spriteMap;
+    private float                   scale;
+    private float                   speed;
+    private int                     bulletHeading;
+    private boolean                 iAmLife;
     
     public Bullet(float x, float y, float scale, float speed, TextureAtlas atlas, int playerHeading) {
         super(EntityType.Bullet, x, y);

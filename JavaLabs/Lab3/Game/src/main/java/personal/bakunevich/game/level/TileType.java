@@ -11,7 +11,7 @@ public enum TileType {
     WATER_3(4),
     ICE (5);
 
-    private final int n;
+    private int n;
 
     TileType (int n) {
         this.n = n;
