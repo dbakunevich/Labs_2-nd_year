@@ -6,6 +6,7 @@ import personal.bakunevich.utils.Utils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,18 +20,18 @@ public class Level {
     public static final int     TILES_IN_WIDHT = Game.WIDHT / SCALED_TILE_SIZE;
     public static final int     TILES_IN_HEIGHT = Game.HEIGHT / SCALED_TILE_SIZE;
 
-    private static Map<TileType, Tile>          tiles;
-    private static Integer[][]                  tileMap;
-    private final ArrayList<Point>              grassCoords;
-    private final ArrayList<Point>              waterCoords;
-    private TileType                            waterType;
-    private final Timer                         timer;
+    private static Map<TileType, Tile>  tiles;
+    private static Integer[][]          tileMap;
+    private final ArrayList<Point>      grassCoords;
+    private final ArrayList<Point>      waterCoords;
+    private TileType                    waterType;
+    private Timer                       timer;
 
     public Level(TextureAtlas atlas) {
         tiles = new HashMap<>();
-        tiles.put(TileType.BRICK, new Tile(atlas.cut(16 * TILE_SCALE, 0, TILE_SCALE, TILE_SCALE),
+        tiles.put(TileType.BRICK, new Tile(atlas.cut(16 * TILE_SCALE, 0 * TILE_SCALE, TILE_SCALE, TILE_SCALE),
                     TILE_IN_GAME_SCALE, TileType.BRICK));
-        tiles.put(TileType.METAL, new Tile(atlas.cut(16 * TILE_SCALE, TILE_SCALE, TILE_SCALE, TILE_SCALE),
+        tiles.put(TileType.METAL, new Tile(atlas.cut(16 * TILE_SCALE, 1 * TILE_SCALE, TILE_SCALE, TILE_SCALE),
                 TILE_IN_GAME_SCALE, TileType.METAL));
         tiles.put(TileType.GRASS, new Tile(atlas.cut(17 * TILE_SCALE, 2 * TILE_SCALE, TILE_SCALE, TILE_SCALE),
                 TILE_IN_GAME_SCALE, TileType.GRASS));
@@ -44,7 +45,7 @@ public class Level {
                 TILE_IN_GAME_SCALE, TileType.ICE));
         tiles.put(TileType.EMPTY, new Tile(atlas.cut(18 * TILE_SCALE, 3 * TILE_SCALE, TILE_SCALE, TILE_SCALE),
                 TILE_IN_GAME_SCALE, TileType.EMPTY));
-
+        //localDateTime = LocalDateTime.now();
         waterType = TileType.WATER_1;
         timer = new Timer(450, e -> {
             if (waterType == TileType.WATER_1){

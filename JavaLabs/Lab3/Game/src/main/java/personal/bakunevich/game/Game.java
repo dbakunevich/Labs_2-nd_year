@@ -42,14 +42,6 @@ public class Game implements Runnable {
     private static Map<EntityType, Bullet> bullets;
     private Sounds              backgroundMusic;
 
-    //tmp
-    float x = WIDHT / 2 - 100.0f;
-    float y = HEIGHT / 2 - 100.0f;
-    float d = 0;
-    float r = 50;
-
-    float speed = 3;
-    //end tmp
 
     public Game() {
         isRun = false;
@@ -104,12 +96,14 @@ public class Game implements Runnable {
         if (bullets.size() != 0) {
             for (Iterator<Map.Entry<EntityType, Bullet>> iterator = bullets.entrySet().iterator();
                 iterator.hasNext();){
+                synchronized (iterator) {
                     Map.Entry<EntityType, Bullet> entry = iterator.next();
                     Bullet bullet = entry.getValue();
                     if (bullet.isLife())
                         bullet.update(input, level);
                     else
                         iterator.remove();
+                }
             }
         }
     }
