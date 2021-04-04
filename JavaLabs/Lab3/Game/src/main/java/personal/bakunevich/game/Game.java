@@ -8,6 +8,7 @@ import personal.bakunevich.game.entity.Player;
 import personal.bakunevich.game.level.CollisionObjects;
 import personal.bakunevich.game.level.Level;
 import personal.bakunevich.graphics.TextureAtlas;
+import personal.bakunevich.utils.Sounds;
 import personal.bakunevich.utils.Time;
 
 import java.awt.*;
@@ -28,6 +29,7 @@ public class Game implements Runnable {
     public static final short   IDLE_TIME       = 1;
 
     public static final String  ATLAS_FILE_NAME = "tanks.png";
+    private static final String BACKGROUND_MUSIC = "/fon.wav";
 
     private boolean             isRun;
     private Thread              gameThread;
@@ -38,6 +40,7 @@ public class Game implements Runnable {
     private final Level         level;
     private final CollisionObjects collisionObjects;
     private static Map<EntityType, Bullet> bullets;
+    private Sounds              backgroundMusic;
 
     //tmp
     float x = WIDHT / 2 - 100.0f;
@@ -59,6 +62,7 @@ public class Game implements Runnable {
         player = new Player(Level.getPositionPlayer_X(), Level.getPositionPlayer_Y(), 4, 3, atlas);
         collisionObjects = new CollisionObjects();
         bullets = new HashMap<>();
+        backgroundMusic = new Sounds(BACKGROUND_MUSIC);
 
     }
 
@@ -100,14 +104,12 @@ public class Game implements Runnable {
         if (bullets.size() != 0) {
             for (Iterator<Map.Entry<EntityType, Bullet>> iterator = bullets.entrySet().iterator();
                 iterator.hasNext();){
-                synchronized (iterator) {
                     Map.Entry<EntityType, Bullet> entry = iterator.next();
                     Bullet bullet = entry.getValue();
                     if (bullet.isLife())
                         bullet.update(input, level);
                     else
                         iterator.remove();
-                }
             }
         }
     }
@@ -128,7 +130,7 @@ public class Game implements Runnable {
     }
 
     public void run() {
-
+        backgroundMusic.sound();
         int FPS = 0;
         int UPD = 0;
         int UPD_LOOP = 0;

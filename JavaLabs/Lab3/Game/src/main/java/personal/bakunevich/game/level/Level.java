@@ -4,8 +4,8 @@ import personal.bakunevich.game.Game;
 import personal.bakunevich.graphics.TextureAtlas;
 import personal.bakunevich.utils.Utils;
 
+import javax.swing.*;
 import java.awt.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,12 +19,12 @@ public class Level {
     public static final int     TILES_IN_WIDHT = Game.WIDHT / SCALED_TILE_SIZE;
     public static final int     TILES_IN_HEIGHT = Game.HEIGHT / SCALED_TILE_SIZE;
 
-    private static Map<TileType, Tile> tiles;
-    private static Integer[][]         tileMap;
-    private final ArrayList<Point>    grassCoords;
-    private final ArrayList<Point>    waterCoords;
-    private TileType                  waterType;
-    private LocalDateTime             localDateTime;
+    private static Map<TileType, Tile>  tiles;
+    private static Integer[][]          tileMap;
+    private final ArrayList<Point>      grassCoords;
+    private final ArrayList<Point>      waterCoords;
+    private TileType                    waterType;
+    private Timer                       timer;
 
     public Level(TextureAtlas atlas) {
         tiles = new HashMap<>();
@@ -45,8 +45,22 @@ public class Level {
         tiles.put(TileType.EMPTY, new Tile(atlas.cut(18 * TILE_SCALE, 3 * TILE_SCALE, TILE_SCALE, TILE_SCALE),
                 TILE_IN_GAME_SCALE, TileType.EMPTY));
 
-        localDateTime = LocalDateTime.now();
         waterType = TileType.WATER_1;
+        timer = new Timer(450, e -> {
+            if (waterType == TileType.WATER_1){
+                waterType = TileType.WATER_2;
+            }
+            else if (waterType == TileType.WATER_2){
+                waterType = TileType.WATER_3;
+            }
+            else if (waterType == TileType.WATER_3){
+                waterType = TileType.WATER_1;
+            }
+            else
+                waterType = TileType.WATER_1;
+
+        });
+        timer.setRepeats(true);
         tileMap = Utils.levelParser("src/main/resources/level.txt");
         grassCoords = new ArrayList<>();
         waterCoords = new ArrayList<>();
@@ -82,25 +96,24 @@ public class Level {
         }
     }
     public void renderWater(Graphics2D graphics) {
+        timer.start();
         if (waterType == TileType.WATER_1) {
             for (Point p : waterCoords) {
                 tiles.get(TileType.WATER_2).render(graphics, p.x, p.y);
             }
-            waterType = TileType.WATER_2;
         }
         else if (waterType == TileType.WATER_2) {
             for (Point p : waterCoords) {
                 tiles.get(TileType.WATER_3).render(graphics, p.x, p.y);
             }
-            waterType = TileType.WATER_3;
         }
         else if (waterType == TileType.WATER_3) {
             for (Point p : waterCoords) {
                 tiles.get(TileType.WATER_1).render(graphics, p.x, p.y);
             }
-            waterType = TileType.WATER_1;
         }
     }
+
 
     public static Map<TileType, Tile> getTiles() {
         return tiles;
