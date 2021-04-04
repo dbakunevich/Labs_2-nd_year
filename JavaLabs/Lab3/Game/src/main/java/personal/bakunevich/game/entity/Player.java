@@ -22,6 +22,8 @@ public class Player extends Entity{
     private static final String shoutSoundURL = "/shootSound.wav";
     private static final String moveSoundURL = "/moveSound.wav";
     private static long         lastShoutTime;
+    private static long         lastMoveTime;
+
 
     private enum Heading{
         NORTH_1(0 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1),
@@ -69,12 +71,14 @@ public class Player extends Entity{
         this.scale = scale;
         this.speed = speed;
 
-        moveSound = new Sounds(moveSoundURL);
-        shoutSound = new Sounds(shoutSoundURL);
+        moveSound = new Sounds(moveSoundURL, 2);
+        shoutSound = new Sounds(shoutSoundURL, 2);
 
         heading = Heading.NORTH_1;
         spriteMap = new HashMap<>();
         lastShoutTime = System.currentTimeMillis();
+        lastMoveTime = System.currentTimeMillis();
+
 
         for (Heading heading : Heading.values()) {
             SpriteSheet sheet = new SpriteSheet(heading.texture(atlas), SPRITES_COUNT, SPRITE_SCALE);
@@ -84,34 +88,29 @@ public class Player extends Entity{
     }
     @Override
     public void update(Input input, Level level) {
-
         float newX = x;
         float newY = y;
 
         for (int i = 0; i < speed; i++){
             if (input.getKey(KeyEvent.VK_UP)){
-                //moveSound.sound();
                 newY -= 1;
                 if ((int) newY % 6 < 3)
                     heading = Heading.NORTH_1;
                 else
                     heading = Heading.NORTH_2;
             } else if (input.getKey(KeyEvent.VK_RIGHT)) {
-                //moveSound.sound();
                 newX += 1;
                 if ((int) newX % 6 < 3)
                     heading = Heading.EAST_1;
                 else
                     heading = Heading.EAST_2;
             } else if (input.getKey(KeyEvent.VK_DOWN)) {
-                //moveSound.sound();
                 newY += 1;
                 if ((int) newY % 6 < 3)
                     heading = Heading.SOUTH_1;
                 else
                     heading = Heading.SOUTH_2;
             } else if (input.getKey(KeyEvent.VK_LEFT)) {
-                //moveSound.sound();
                 newX -= 1;
                 if ((int) newX % 6 < 3)
                     heading = Heading.WEST_1;
@@ -123,6 +122,7 @@ public class Player extends Entity{
                     Bullet bullet = new Bullet(x + SPRITE_SCALE + 4, y + SPRITE_SCALE + 4, 5, speed * 2, Game.atlas, heading.numeric());
                     Game.addBullet(EntityType.Player, bullet);
                     shoutSound.sound();
+                    moveSound.sound();
                     lastShoutTime = System.currentTimeMillis();
                 }
             }

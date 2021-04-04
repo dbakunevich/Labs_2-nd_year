@@ -4,8 +4,8 @@ import java.util.Map;
 
 public class CollisionObjects {
 
-    private static Integer[][] tileMap;
-    private static Map<TileType, Tile> tiles;
+    public static Integer[][] tileMap;
+    public static Map<TileType, Tile> tiles;
 
     public CollisionObjects() {
         tileMap = Level.getTileMap();
