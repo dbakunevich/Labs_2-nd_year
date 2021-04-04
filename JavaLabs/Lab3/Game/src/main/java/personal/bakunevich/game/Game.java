@@ -5,7 +5,6 @@ import personal.bakunevich.display.Display;
 import personal.bakunevich.game.entity.Bullet;
 import personal.bakunevich.game.entity.EntityType;
 import personal.bakunevich.game.entity.Player;
-import personal.bakunevich.game.level.CollisionObjects;
 import personal.bakunevich.game.level.Level;
 import personal.bakunevich.graphics.TextureAtlas;
 import personal.bakunevich.utils.Sounds;
@@ -31,25 +30,17 @@ public class Game implements Runnable {
     public static final String  ATLAS_FILE_NAME = "tanks.png";
     private static final String BACKGROUND_MUSIC = "/fon.wav";
 
-    private boolean             isRun;
-    private Thread              gameThread;
-    private final Graphics2D    graphics;
-    private final Input         input;
-    public   static TextureAtlas        atlas;
-    private final Player player;
-    private final Level         level;
-    private final CollisionObjects collisionObjects;
-    private static Map<EntityType, Bullet> bullets;
-    private Sounds              backgroundMusic;
+    private boolean                         isRun;
+    private Thread                          gameThread;
+    private final Graphics2D                graphics;
+    private final Input                     input;
+    public   static TextureAtlas            atlas;
+    private final Player                    player;
+    private final Level                     level;
+    //private final CollisionObjects collisionObjects;
+    private static Map<EntityType, Bullet>  bullets;
+    private final Sounds                    backgroundMusic;
 
-    //tmp
-    float x = WIDHT / 2 - 100.0f;
-    float y = HEIGHT / 2 - 100.0f;
-    float d = 0;
-    float r = 50;
-
-    float speed = 3;
-    //end tmp
 
     public Game() {
         isRun = false;
@@ -60,7 +51,7 @@ public class Game implements Runnable {
         atlas = new TextureAtlas(ATLAS_FILE_NAME);
         level = new Level(atlas);
         player = new Player(Level.getPositionPlayer_X(), Level.getPositionPlayer_Y(), 4, 3, atlas);
-        collisionObjects = new CollisionObjects();
+        //collisionObjects = new CollisionObjects();
         bullets = new HashMap<>();
         backgroundMusic = new Sounds(BACKGROUND_MUSIC);
 

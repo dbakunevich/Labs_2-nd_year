@@ -8,7 +8,7 @@ import java.awt.image.*;
 public class Tile {
 
     private BufferedImage image;
-    private TileType type;
+    private final TileType type;
 
     protected Tile(BufferedImage image, int scale, TileType type) {
         this.type = type;
