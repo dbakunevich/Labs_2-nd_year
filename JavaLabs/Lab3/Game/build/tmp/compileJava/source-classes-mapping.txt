@@ -16,9 +16,6 @@ personal/bakunevich/game/Game.java
 personal/bakunevich/game/entity/Player.java
  personal.bakunevich.game.entity.Player
  personal.bakunevich.game.entity.Player$Heading
-personal/bakunevich/utils/Sounds.java
- personal.bakunevich.utils.Sounds
- personal.bakunevich.utils.Sounds$1
 personal/bakunevich/IO/Input.java
  personal.bakunevich.IO.Input
  personal.bakunevich.IO.Input$1

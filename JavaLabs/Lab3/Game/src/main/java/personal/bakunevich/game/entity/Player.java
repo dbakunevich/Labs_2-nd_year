@@ -24,15 +24,15 @@ public class Player extends Entity{
     private static long         lastShoutTime;
 
     private enum Heading{
-        NORTH_1(0, 0, SPRITE_SCALE, SPRITE_SCALE, 1),
-        EAST_1(6 * SPRITE_SCALE, 0, SPRITE_SCALE, SPRITE_SCALE, 2),
-        SOUTH_1(4 * SPRITE_SCALE, 0, SPRITE_SCALE, SPRITE_SCALE, 3),
-        WEST_1(2 * SPRITE_SCALE, 0, SPRITE_SCALE, SPRITE_SCALE, 4),
+        NORTH_1(0 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1),
+        EAST_1(6 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 * SPRITE_SCALE, 2),
+        SOUTH_1(4 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 *SPRITE_SCALE, 3),
+        WEST_1(2 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 * SPRITE_SCALE, 4),
 
-        NORTH_2(SPRITE_SCALE, 0, SPRITE_SCALE, SPRITE_SCALE, 1),
-        EAST_2(7 * SPRITE_SCALE, 0, SPRITE_SCALE, SPRITE_SCALE, 2),
-        SOUTH_2(5 * SPRITE_SCALE, 0, SPRITE_SCALE, SPRITE_SCALE, 3),
-        WEST_2(3 * SPRITE_SCALE, 0, SPRITE_SCALE, SPRITE_SCALE, 4);
+        NORTH_2(1 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1),
+        EAST_2(7 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 * SPRITE_SCALE, 2),
+        SOUTH_2(5 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 *SPRITE_SCALE, 3),
+        WEST_2(3 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 * SPRITE_SCALE, 4);
 
 
         private final int x, y, weight, height, n;
@@ -55,11 +55,11 @@ public class Player extends Entity{
     }
 
     private Heading                 heading;
-    private final Map<Heading, Sprite>    spriteMap;
-    private final float                   scale;
-    private final float                   speed;
-    private final Sounds                  moveSound;
-    private final Sounds                  shoutSound;
+    private Map<Heading, Sprite>    spriteMap;
+    private float                   scale;
+    private float                   speed;
+    private Sounds                  moveSound;
+    private Sounds                  shoutSound;
 
 
 
