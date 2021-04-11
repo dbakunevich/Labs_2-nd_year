@@ -2,11 +2,13 @@ package personal.bakunevich.utils;
 
 import javax.sound.sampled.*;
 import java.io.IOException;
+import java.util.Objects;
 
 public class Sounds {
     private final String track;
     private FloatControl volume;
     private double wt;
+    private Clip clip;
 
     public Sounds(String track, double wt) {
         this.track = track;
@@ -14,27 +16,28 @@ public class Sounds {
         volume = null;
     }
 
-    public synchronized void sound(){
+    public void sound(){
+        AudioInputStream audioStream = null;
+        try {
+            audioStream = AudioSystem.getAudioInputStream(
+                    Objects.requireNonNull(Sounds.class.getResourceAsStream(track)));
+        } catch (UnsupportedAudioFileException | IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            clip = AudioSystem.getClip();
+            clip.open(audioStream);
+            volume = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
 
-        new Thread(() -> {
-            AudioInputStream audioStream = null;
-            try {
-                audioStream = AudioSystem.getAudioInputStream(
-                        Sounds.class.getResourceAsStream(track));
-            } catch (UnsupportedAudioFileException | IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                Clip clip = AudioSystem.getClip();
-                clip.open(audioStream);
-                volume = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            clip.setFramePosition(0);
+            clip.start();
+        } catch (LineUnavailableException | IOException e){
+            e.printStackTrace();
+        }
+    }
 
-                clip.setFramePosition(0);
-                clip.start();
-            } catch (LineUnavailableException | IOException e){
-                e.printStackTrace();
-            }
-        }).start();
+    public void stop(){
+        clip.stop();
     }
 
     public void setVolume() {

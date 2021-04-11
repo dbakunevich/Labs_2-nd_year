@@ -1,4 +1,4 @@
-    package personal.bakunevich.game.entity;
+package personal.bakunevich.game.entity;
 
 import personal.bakunevich.IO.Input;
 import personal.bakunevich.game.Game;
@@ -10,31 +10,36 @@ import personal.bakunevich.graphics.TextureAtlas;
 import personal.bakunevich.utils.Sounds;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
-public class Player extends Entity{
+public class Enemie extends Entity{
 
     public static final int SPRITE_SCALE = 16;
     public static final int SPRITES_COUNT = 1;
+    public static final int newAct = 20;
     private static final String shoutSoundURL = "/shootSound.wav";
     private static final String moveSoundURL = "/moveSound.wav";
     private static long         lastShoutTime;
     private static long         lastMoveTime;
+    private static Random       random;
+    private static int          counterAct;
+    private static int          currentAct;
+    public static int           currentIndex;
 
 
     private enum Heading{
-        NORTH_1(0 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1),
-        EAST_1(6 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 * SPRITE_SCALE, 2),
-        SOUTH_1(4 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 *SPRITE_SCALE, 3),
-        WEST_1(2 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 * SPRITE_SCALE, 4),
+        NORTH_1(8 * SPRITE_SCALE, 0, SPRITE_SCALE, SPRITE_SCALE, 1),
+        EAST_1(14 * SPRITE_SCALE, 0, SPRITE_SCALE, SPRITE_SCALE, 2),
+        SOUTH_1(12 * SPRITE_SCALE, 0, SPRITE_SCALE, SPRITE_SCALE, 3),
+        WEST_1(10 * SPRITE_SCALE, 0, SPRITE_SCALE, SPRITE_SCALE, 4),
 
-        NORTH_2(1 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1),
-        EAST_2(7 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 * SPRITE_SCALE, 2),
-        SOUTH_2(5 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 *SPRITE_SCALE, 3),
-        WEST_2(3 * SPRITE_SCALE, 0 * SPRITE_SCALE, 1 * SPRITE_SCALE, 1 * SPRITE_SCALE, 4);
+        NORTH_2(9 * SPRITE_SCALE, 0, SPRITE_SCALE, SPRITE_SCALE, 1),
+        EAST_2(15 * SPRITE_SCALE, 0, SPRITE_SCALE, SPRITE_SCALE, 2),
+        SOUTH_2(13 * SPRITE_SCALE, 0, SPRITE_SCALE, SPRITE_SCALE, 3),
+        WEST_2(11 * SPRITE_SCALE, 0, SPRITE_SCALE, SPRITE_SCALE, 4);
 
 
         private final int x, y, weight, height, n;
@@ -56,17 +61,17 @@ public class Player extends Entity{
         }
     }
 
-    private Heading                 heading;
-    private Map<Heading, Sprite>    spriteMap;
-    private float                   scale;
-    private float                   speed;
-    private Sounds                  moveSound;
-    private Sounds                  shoutSound;
+    private Enemie.Heading heading;
+    private final Map<Heading, Sprite> spriteMap;
+    private final float                   scale;
+    private final float                   speed;
+    private final Sounds moveSound;
+    private final Sounds                  shoutSound;
 
 
 
-    public Player (float x, float y, float scale, float speed, TextureAtlas atlas) {
-        super(EntityType.Player, x, y);
+    public Enemie(float x, float y, float scale, float speed, TextureAtlas atlas) {
+        super(EntityType.Enemies, x, y);
 
         this.scale = scale;
         this.speed = speed;
@@ -74,63 +79,63 @@ public class Player extends Entity{
         moveSound = new Sounds(moveSoundURL, 2);
         shoutSound = new Sounds(shoutSoundURL, 2);
 
-        heading = Heading.NORTH_1;
+        heading = Enemie.Heading.NORTH_1;
         spriteMap = new HashMap<>();
         lastShoutTime = System.currentTimeMillis();
         lastMoveTime = System.currentTimeMillis();
 
 
-        for (Heading heading : Heading.values()) {
+        for (Enemie.Heading heading : Enemie.Heading.values()) {
             SpriteSheet sheet = new SpriteSheet(heading.texture(atlas), SPRITES_COUNT, SPRITE_SCALE);
             Sprite sprite = new Sprite(sheet, scale);
             spriteMap.put(heading, sprite);
         }
+        random = new Random();
+        currentAct = random.nextInt(5);
+        counterAct = 0;
+
     }
     @Override
     public void update(Input input, Level level) {
+        if (counterAct > newAct){
+            currentAct = random.nextInt(5);
+            counterAct = 0;
+        }
+        else
+            counterAct++;
         float newX = x;
         float newY = y;
 
         for (int i = 0; i < speed; i++){
-            if (input.getKey(KeyEvent.VK_1)) {
-                speed++;
-                return;
-            }
-            else if (input.getKey(KeyEvent.VK_2)) {
-                speed--;
-                if (speed <= 1)
-                    speed = 1;
-                return;
-            }
-            if (input.getKey(KeyEvent.VK_UP)){
+            if (currentAct == 0){
                 newY -= 1;
                 if ((int) newY % 6 < 3)
-                    heading = Heading.NORTH_1;
+                    heading = Enemie.Heading.NORTH_1;
                 else
-                    heading = Heading.NORTH_2;
-            } else if (input.getKey(KeyEvent.VK_RIGHT)) {
+                    heading = Enemie.Heading.NORTH_2;
+            } else if (currentAct == 1) {
                 newX += 1;
                 if ((int) newX % 6 < 3)
-                    heading = Heading.EAST_1;
+                    heading = Enemie.Heading.EAST_1;
                 else
-                    heading = Heading.EAST_2;
-            } else if (input.getKey(KeyEvent.VK_DOWN)) {
+                    heading = Enemie.Heading.EAST_2;
+            } else if (currentAct == 2) {
                 newY += 1;
                 if ((int) newY % 6 < 3)
-                    heading = Heading.SOUTH_1;
+                    heading = Enemie.Heading.SOUTH_1;
                 else
-                    heading = Heading.SOUTH_2;
-            } else if (input.getKey(KeyEvent.VK_LEFT)) {
+                    heading = Enemie.Heading.SOUTH_2;
+            } else if (currentAct == 3) {
                 newX -= 1;
                 if ((int) newX % 6 < 3)
-                    heading = Heading.WEST_1;
+                    heading = Enemie.Heading.WEST_1;
                 else
-                    heading = Heading.WEST_2;
+                    heading = Enemie.Heading.WEST_2;
             }
-            if (input.getKey(KeyEvent.VK_SPACE)){
-                if (Game.checkBullet(EntityType.Player) && (System.currentTimeMillis() - lastShoutTime >= 1200)) {
+            if (currentAct == 4){
+                if (Game.checkBullet(EntityType.Enemies) && (System.currentTimeMillis() - lastShoutTime >= 1200)) {
                     Bullet bullet = new Bullet(x + SPRITE_SCALE + 6, y + SPRITE_SCALE + 6, 5, speed * 2, Game.atlas, heading.numeric());
-                    Game.addBullet(EntityType.Player, bullet);
+                    Game.addBullet(EntityType.Enemies, bullet);
                     shoutSound.sound();
                     moveSound.sound();
                     lastShoutTime = System.currentTimeMillis();
@@ -167,7 +172,7 @@ public class Player extends Entity{
     }
 
     public static void isDie() {
-        Game.whichFinish = 9;
+        Game.whichFinish = 2;
     }
 
     public int currentPosition_X(){

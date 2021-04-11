@@ -16,6 +16,9 @@ personal/bakunevich/game/Game.java
 personal/bakunevich/game/entity/Player.java
  personal.bakunevich.game.entity.Player
  personal.bakunevich.game.entity.Player$Heading
+personal/bakunevich/game/entity/Enemie.java
+ personal.bakunevich.game.entity.Enemie
+ personal.bakunevich.game.entity.Enemie$Heading
 personal/bakunevich/utils/Sounds.java
  personal.bakunevich.utils.Sounds
 personal/bakunevich/IO/Input.java
@@ -39,5 +42,7 @@ personal/bakunevich/graphics/Sprite.java
  personal.bakunevich.graphics.Sprite
 personal/bakunevich/game/entity/Entity.java
  personal.bakunevich.game.entity.Entity
+personal/bakunevich/game/level/boomAnimation.java
+ personal.bakunevich.game.level.boomAnimation
 personal/bakunevich/utils/Utils.java
  personal.bakunevich.utils.Utils

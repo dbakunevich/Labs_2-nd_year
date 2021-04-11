@@ -68,7 +68,6 @@ public abstract class Display {
 
     public static void destroy() {
         if (!isCreated) return;
-
         window.dispose();
     }
 

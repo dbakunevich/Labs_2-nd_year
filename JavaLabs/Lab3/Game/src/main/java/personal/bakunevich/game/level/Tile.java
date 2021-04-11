@@ -8,7 +8,7 @@ import java.awt.image.*;
 public class Tile {
 
     private BufferedImage image;
-    private TileType type;
+    private final TileType type;
 
     protected Tile(BufferedImage image, int scale, TileType type) {
         this.type = type;
@@ -16,8 +16,8 @@ public class Tile {
     }
 
     protected void render(Graphics2D graphics, int x, int y) {
-        image = makeBlackBGToTransparent(image);
-        graphics.drawImage(image, x, y, null);
+        this.image = makeBlackBGToTransparent(this.image);
+        graphics.drawImage(this.image, x, y, null);
     }
 
     protected TileType type() {

@@ -3,6 +3,7 @@ package personal.bakunevich.game;
 import personal.bakunevich.IO.Input;
 import personal.bakunevich.display.Display;
 import personal.bakunevich.game.entity.Bullet;
+import personal.bakunevich.game.entity.Enemie;
 import personal.bakunevich.game.entity.EntityType;
 import personal.bakunevich.game.entity.Player;
 import personal.bakunevich.game.level.CollisionObjects;
@@ -11,6 +12,7 @@ import personal.bakunevich.graphics.TextureAtlas;
 import personal.bakunevich.utils.Time;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -23,7 +25,7 @@ public class Game implements Runnable {
     public static final int     CLEAR_COLOR     = 0xff000000;
     public static final int     NUM_BUFFERS     = 3;
 
-    public static final float   UPDATE_RATE     = 80.0f;
+    public static final float   UPDATE_RATE     = 60.0f;
     public static final float   UPDATE_INTERVAL = Time.SECOND / UPDATE_RATE;
     public static final short   IDLE_TIME       = 1;
 
@@ -42,6 +44,7 @@ public class Game implements Runnable {
 
     public Game() {
         isRun = false;
+        whichFinish = 0;
         Display.create(WIDHT, HEIGHT, TITLE, CLEAR_COLOR, NUM_BUFFERS);
         graphics = Display.getGraphics();
         input = new Input();
@@ -49,9 +52,16 @@ public class Game implements Runnable {
         atlas = new TextureAtlas(ATLAS_FILE_NAME);
         level = new Level(atlas);
         player = new Player(Level.getPositionPlayer_X(), Level.getPositionPlayer_Y(), 4, 3, atlas);
+        enemie = new Enemie(Level.getPositionEnemies_X(), Level.getPositionEnemies_Y(), 4, 3, atlas);
         collisionObjects = new CollisionObjects();
         bullets = new HashMap<>();
 
+    }
+
+    private void MBadd(){
+//        if (System.currentTimeMillis() - currentTime >= 5000) {
+//            enemieS.add(new Enemies());
+//        }
     }
 
     public static void addBullet(EntityType entity, Bullet bullet){
@@ -59,7 +69,7 @@ public class Game implements Runnable {
     }
 
     public static boolean checkBullet(EntityType entity){
-        return bullets.containsKey(entity);
+        return !bullets.containsKey(entity);
     }
 
 
@@ -76,19 +86,19 @@ public class Game implements Runnable {
     public synchronized void finish() {
         if (!isRun) return;
 
+        System.out.print("YOU LOSE\n");
         isRun = false;
-        try {
-            gameThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        // cleanUp();
+
+//        gameThread.stop();
 
         cleanUp();
     }
 
     private void update() {
         player.update(input, level);
-        level.update();
+        enemie.update(input, level);
+        level.update(player, enemie);
         if (bullets.size() != 0) {
             for (Iterator<Map.Entry<EntityType, Bullet>> iterator = bullets.entrySet().iterator();
                 iterator.hasNext();){
@@ -108,6 +118,7 @@ public class Game implements Runnable {
         Display.clear();
 
         player.render(graphics);
+        enemie.render(graphics);
         level.render(graphics);
         level.renderWater(graphics);
 
@@ -115,6 +126,7 @@ public class Game implements Runnable {
             bullets.forEach((type, x) -> x.render(graphics));
 
         level.renderGrass(graphics);
+        boomAnimation.renderBoom(graphics);
 
         Display.swapBuffers();
     }
@@ -169,7 +181,19 @@ public class Game implements Runnable {
                 FPS = 0;
                 count = 0;
             }
+            if (whichFinish != 0) {
+                if (whichFinish == 1)
+                    System.out.println("YOU BASE IS BROKEN");
+                else if (whichFinish == 9)
+                    System.out.println("YOUR TANK IS DIE");
+                else if (whichFinish == 2){
+                    System.out.println("ALL ENEMIES ARE DIE");
+                }
+                break;
+            }
         }
+        backgroundMusic.stop();
+        finish();
     }
 
     private void cleanUp() {

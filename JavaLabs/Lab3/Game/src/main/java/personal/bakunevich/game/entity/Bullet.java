@@ -4,6 +4,7 @@ import personal.bakunevich.IO.Input;
 import personal.bakunevich.game.Game;
 import personal.bakunevich.game.level.CollisionObjects;
 import personal.bakunevich.game.level.Level;
+import personal.bakunevich.game.level.boomAnimation;
 import personal.bakunevich.graphics.Sprite;
 import personal.bakunevich.graphics.SpriteSheet;
 import personal.bakunevich.graphics.TextureAtlas;
@@ -24,7 +25,10 @@ public class Bullet extends Entity{
         SOUTH(21 * SPRITE_SCALE + 3, 6 * SPRITE_SCALE + 6, 1 * BULLET_SCALE, 1 *BULLET_SCALE),
         WEST(20 * SPRITE_SCALE + 10, 6 * SPRITE_SCALE + 6, 1 * BULLET_SCALE, 1 * BULLET_SCALE);
 
-        private int x, y, weight, height;
+        private final int x;
+        private final int y;
+        private final int weight;
+        private final int height;
 
         Heading(int x, int y, int weight, int height){
             this.x = x;
@@ -38,10 +42,10 @@ public class Bullet extends Entity{
         }
     }
     private Heading                 heading;
-    private Map<Heading, Sprite>    spriteMap;
-    private float                   scale;
-    private float                   speed;
-    private int                     bulletHeading;
+    private final Map<Heading, Sprite>    spriteMap;
+    private final float                   scale;
+    private final float                   speed;
+    private final int                     bulletHeading;
     private boolean                 iAmLife;
     
     public Bullet(float x, float y, float scale, float speed, TextureAtlas atlas, int playerHeading) {
@@ -81,13 +85,15 @@ public class Bullet extends Entity{
             }
 
             if (newX < 0 || newY < 0) {
+                boomAnimation.startBoom((int)newX + 8, (int)newY + 8);
                 iAmLife = false;
                 break;
             } else if (newX >= Game.WIDHT - SPRITE_SCALE * scale || newY >= Game.HEIGHT - SPRITE_SCALE * scale) {
+                boomAnimation.startBoom((int)newX + 8, (int)newY + 8);
                 iAmLife = false;
                 break;
             }
-            if (CollisionObjects.collisionBullets(newX, newY, bulletHeading)) {
+            if (CollisionObjects.collisionBullets(newX, newY, bulletHeading, Level.getArrayEntityPositions())) {
                 iAmLife = false;
                 break;
             }
@@ -106,54 +112,3 @@ public class Bullet extends Entity{
         return iAmLife;
     }
 }
-
-/*    @Override
-    public void update(Input input, Level level) {
-
-        float newX = x;
-        float newY = y;
-
-        for (int i = 0; i < speed; i++){
-            if (input.getKey(KeyEvent.VK_UP)){
-                newY -= 1;
-                heading = Heading.NORTH;
-            } else if (input.getKey(KeyEvent.VK_RIGHT)) {
-                newX += 1;
-                heading = Heading.EAST;
-            } else if (input.getKey(KeyEvent.VK_DOWN)) {
-                newY += 1;
-                heading = Heading.SOUTH;
-            } else if (input.getKey(KeyEvent.VK_LEFT)) {
-                newX -= 1;
-                heading = Heading.WEST;
-            }
-            if (newX < 0) {
-                newX = 0;
-                break;
-            } else if (newX >= Game.WIDHT - SPRITE_SCALE * scale) {
-                newX = Game.WIDHT - SPRITE_SCALE * scale;
-                break;
-            }
-            if (newY < 0) {
-                newY = 0;
-                break;
-            } else if (newY >= Game.HEIGHT - SPRITE_SCALE * scale) {
-                newY = Game.HEIGHT - SPRITE_SCALE * scale;
-                break;
-            }
-
-            if (CollisionObjects.collisionObjects(newX, newY)) {
-                newX = x;
-                newY = y;
-            }
-
-            x = newX;
-            y = newY;
-        }
-    }
-    @Override
-    public void render(Graphics2D graphics) {
-        spriteMap.get(heading).render(graphics, x, y);
-    }
-}*/
-
