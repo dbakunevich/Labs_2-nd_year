@@ -7,6 +7,8 @@ personal/bakunevich/game/entity/EntityType.java
  personal.bakunevich.game.entity.EntityType
 personal/bakunevich/utils/Time.java
  personal.bakunevich.utils.Time
+personal/bakunevich/game/level/BoomAnimation.java
+ personal.bakunevich.game.level.BoomAnimation
 personal/bakunevich/game/level/CollisionObjects.java
  personal.bakunevich.game.level.CollisionObjects
 personal/bakunevich/game/level/TileType.java
@@ -40,9 +42,11 @@ personal/bakunevich/graphics/SpriteSheet.java
  personal.bakunevich.graphics.SpriteSheet
 personal/bakunevich/graphics/Sprite.java
  personal.bakunevich.graphics.Sprite
+personal/bakunevich/display/Menu.java
+ personal.bakunevich.display.ListenerAction
+ personal.bakunevich.display.ListenerChange
+ personal.bakunevich.display.Menu
 personal/bakunevich/game/entity/Entity.java
  personal.bakunevich.game.entity.Entity
-personal/bakunevich/game/level/boomAnimation.java
- personal.bakunevich.game.level.boomAnimation
 personal/bakunevich/utils/Utils.java
  personal.bakunevich.utils.Utils

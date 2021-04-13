@@ -36,6 +36,9 @@ public class Sounds {
         }
     }
 
+    public void setLoop(){
+        clip.loop(Integer.MAX_VALUE);
+    }
     public void stop(){
         clip.stop();
     }

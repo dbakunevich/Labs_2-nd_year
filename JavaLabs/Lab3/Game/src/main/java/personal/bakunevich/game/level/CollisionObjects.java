@@ -30,9 +30,11 @@ public class CollisionObjects {
         for (int i = 0; i < arrayEntityPositions.size() / 2; i++) {
             int first = arrayEntityPositions.get(i * 2);
             int second = arrayEntityPositions.get(i * 2 + 1);
-            if (    Math.abs(first - (newX1 + newX2) * Level.SCALED_TILE_SIZE / 2) - 5 < Player.SPRITE_SCALE * 4 &&
-                    Math.abs(second - (newY1 + newY2) * Level.SCALED_TILE_SIZE / 2) - 5 < Player.SPRITE_SCALE * 4 &&
+            if (    Math.abs(first - (int) x) + 8 < Player.SPRITE_SCALE * 4 &&
+                    Math.abs(second - (int) y) + 8 < Player.SPRITE_SCALE * 4 &&
                     first != (int) x && second != (int) y) {
+                BoomAnimation.startBoom((int) x + 32, (int) y + 32);
+                Player.isDie();
                 return true;
             }
         }
@@ -49,13 +51,13 @@ public class CollisionObjects {
                 Math.abs(second + Player.SPRITE_SCALE * 2 - (int) y - 2) < Player.SPRITE_SCALE * 2 + 2) {
                 if (i == 0) {
                     if (Game.checkBullet(EntityType.Player)){
-                        boomAnimation.startBoom((int) x, (int) y);
+                        BoomAnimation.startBoom((int) x, (int) y);
                         Player.isDie();
                     }
                 }
                 else {
                     if (Game.checkBullet(EntityType.Enemies)) {
-                        boomAnimation.startBoom((int) x, (int) y);
+                        BoomAnimation.startBoom((int) x, (int) y);
                         Enemie.isDie();
                     }
                 }
@@ -165,7 +167,7 @@ public class CollisionObjects {
                 tile.type().numeric() == TileType.BRICK_5.numeric() ||
                 tile.type().numeric() == TileType.BRICK_6.numeric()){
 
-            boomAnimation.startBoom(xBoom, yBoom);
+            BoomAnimation.startBoom(xBoom, yBoom);
             return 1;
         }
 

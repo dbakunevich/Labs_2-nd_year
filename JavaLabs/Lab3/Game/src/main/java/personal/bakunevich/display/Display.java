@@ -40,6 +40,8 @@ public abstract class Display {
         window.setLocationRelativeTo(null);
         window.setVisible(true);
 
+
+
         bufferImage = new BufferedImage(wight, height, BufferedImage.TYPE_INT_ARGB);
         bufferData = ((DataBufferInt) bufferImage.getRaster().getDataBuffer()).getData();
         bufferGraphics = bufferImage.getGraphics();
@@ -77,5 +79,8 @@ public abstract class Display {
 
     public static void addInputListener (Input inputListener) {
         window.add(inputListener);
+    }
+    public static void addButton (JButton button) {
+        window.add(button);
     }
 }

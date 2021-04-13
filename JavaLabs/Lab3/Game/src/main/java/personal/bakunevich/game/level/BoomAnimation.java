@@ -5,7 +5,7 @@ import personal.bakunevich.graphics.TextureAtlas;
 import javax.swing.*;
 import java.awt.*;
 
-public class boomAnimation {
+public class BoomAnimation {
     private Tile emptyFrame;
     private Tile firstFrame;
     private Tile secondFrame;
@@ -17,7 +17,7 @@ public class boomAnimation {
     private Timer timer;
     private static long         lastShoutTime;
 
-    public boomAnimation(TextureAtlas atlas) {
+    public BoomAnimation(TextureAtlas atlas) {
         TextureAtlas atlasBoom = new TextureAtlas("boom1.png");
         emptyFrame = new Tile(atlas.cut(18 * Level.TILE_SCALE, 3 * Level.TILE_SCALE, Level.TILE_SCALE, Level.TILE_SCALE),
                 Level.TILE_IN_GAME_SCALE, TileType.EMPTY);
@@ -35,7 +35,7 @@ public class boomAnimation {
         currentTile = emptyFrame;
         isBoom = false;
 
-        timer = new Timer(250, e -> {
+        timer = new Timer(100, e -> {
             if (currentTile == emptyFrame){
                 currentTile = firstFrame;
             }
@@ -47,6 +47,7 @@ public class boomAnimation {
             }
             else if (currentTile == thirdFrame){
                 currentTile = emptyFrame;
+                isBoom = false;
             }
         });
         timer.setRepeats(true);

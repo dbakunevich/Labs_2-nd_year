@@ -132,7 +132,6 @@ public class Player extends Entity{
                     Bullet bullet = new Bullet(x + SPRITE_SCALE + 6, y + SPRITE_SCALE + 6, 5, speed * 2, Game.atlas, heading.numeric());
                     Game.addBullet(EntityType.Player, bullet);
                     shoutSound.sound();
-                    moveSound.sound();
                     lastShoutTime = System.currentTimeMillis();
                 }
             }

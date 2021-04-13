@@ -2,10 +2,12 @@ package personal.bakunevich.game;
 
 import personal.bakunevich.IO.Input;
 import personal.bakunevich.display.Display;
+import personal.bakunevich.display.Menu;
 import personal.bakunevich.game.entity.Bullet;
 import personal.bakunevich.game.entity.Enemie;
 import personal.bakunevich.game.entity.EntityType;
 import personal.bakunevich.game.entity.Player;
+import personal.bakunevich.game.level.BoomAnimation;
 import personal.bakunevich.game.level.CollisionObjects;
 import personal.bakunevich.game.level.Level;
 import personal.bakunevich.graphics.TextureAtlas;
@@ -44,24 +46,27 @@ public class Game implements Runnable {
 
     public Game() {
         isRun = false;
+        isStartMenu = false;
+        isFinishMenu = false;
         whichFinish = 0;
         Display.create(WIDHT, HEIGHT, TITLE, CLEAR_COLOR, NUM_BUFFERS);
         graphics = Display.getGraphics();
         input = new Input();
         Display.addInputListener(input);
         atlas = new TextureAtlas(ATLAS_FILE_NAME);
+        menu = new Menu(atlas);
         level = new Level(atlas);
         player = new Player(Level.getPositionPlayer_X(), Level.getPositionPlayer_Y(), 4, 3, atlas);
-        enemie = new Enemie(Level.getPositionEnemies_X(), Level.getPositionEnemies_Y(), 4, 3, atlas);
         collisionObjects = new CollisionObjects();
         bullets = new HashMap<>();
 
     }
 
     private void MBadd(){
-//        if (System.currentTimeMillis() - currentTime >= 5000) {
-//            enemieS.add(new Enemies());
-//        }
+        if (System.currentTimeMillis() - currentTime >= 5000) {
+            currentTime = System.currentTimeMillis();
+            enemies.add(new Enemie(Level.getPositionEnemies_X(), Level.getPositionEnemies_Y(), 4, 3, atlas));
+        }
     }
 
     public static void addBullet(EntityType entity, Bullet bullet){
@@ -78,9 +83,14 @@ public class Game implements Runnable {
         if (isRun) return;
 
         isRun = true;
+        isStartMenu = true;
 
         gameThread = new Thread(this);
         gameThread.start();
+        if (isStartMenu) {
+            runMenu();
+            isStartMenu = false;
+        }
     }
 
     public synchronized void finish() {
@@ -88,17 +98,16 @@ public class Game implements Runnable {
 
         System.out.print("YOU LOSE\n");
         isRun = false;
-        // cleanUp();
 
-//        gameThread.stop();
-
-        cleanUp();
+        //cleanUp();
     }
 
     private void update() {
         player.update(input, level);
-        enemie.update(input, level);
-        level.update(player, enemie);
+        for (Enemie e: enemies) {
+            e.update(input, level);
+            level.update(player, e);
+        }
         if (bullets.size() != 0) {
             for (Iterator<Map.Entry<EntityType, Bullet>> iterator = bullets.entrySet().iterator();
                 iterator.hasNext();){
@@ -118,7 +127,9 @@ public class Game implements Runnable {
         Display.clear();
 
         player.render(graphics);
-        enemie.render(graphics);
+        for (Enemie e: enemies) {
+            e.render(graphics);
+        }
         level.render(graphics);
         level.renderWater(graphics);
 
@@ -129,6 +140,48 @@ public class Game implements Runnable {
         boomAnimation.renderBoom(graphics);
 
         Display.swapBuffers();
+    }
+
+    private void updateMenu() {
+        menu.update(input);
+    }
+
+    private void renderMenu() {
+        Display.clear();
+
+        menu.render(graphics);
+
+        Display.swapBuffers();
+    }
+
+    private void runMenu(){
+        float delta = 0.0f;
+        long startTime = Time.getSecond();
+        while (isStartMenu) {
+            long nowTime = Time.getSecond();
+            long elapsedTime = nowTime - startTime;
+            startTime = nowTime;
+
+            boolean isRender = false;
+            delta += (elapsedTime / UPDATE_INTERVAL);
+            while (delta >= 1) {
+                updateMenu();
+                delta--;
+                isRender = true;
+            }
+            if (isRender) {
+                renderMenu();
+            }
+            else {
+                try {
+                    Thread.sleep(IDLE_TIME);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    break;
+                }
+            }
+            isStartMenu = false;
+        }
     }
 
     public void run() {
@@ -193,6 +246,7 @@ public class Game implements Runnable {
             }
         }
         backgroundMusic.stop();
+        render();
         finish();
     }
 

@@ -4,7 +4,7 @@ import personal.bakunevich.IO.Input;
 import personal.bakunevich.game.Game;
 import personal.bakunevich.game.level.CollisionObjects;
 import personal.bakunevich.game.level.Level;
-import personal.bakunevich.game.level.boomAnimation;
+import personal.bakunevich.game.level.BoomAnimation;
 import personal.bakunevich.graphics.Sprite;
 import personal.bakunevich.graphics.SpriteSheet;
 import personal.bakunevich.graphics.TextureAtlas;
@@ -85,11 +85,11 @@ public class Bullet extends Entity{
             }
 
             if (newX < 0 || newY < 0) {
-                boomAnimation.startBoom((int)newX + 8, (int)newY + 8);
+                BoomAnimation.startBoom((int)newX + 8, (int)newY + 8);
                 iAmLife = false;
                 break;
             } else if (newX >= Game.WIDHT - SPRITE_SCALE * scale || newY >= Game.HEIGHT - SPRITE_SCALE * scale) {
-                boomAnimation.startBoom((int)newX + 8, (int)newY + 8);
+                BoomAnimation.startBoom((int)newX + 8, (int)newY + 8);
                 iAmLife = false;
                 break;
             }
