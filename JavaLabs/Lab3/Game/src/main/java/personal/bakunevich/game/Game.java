@@ -11,6 +11,7 @@ import personal.bakunevich.game.level.BoomAnimation;
 import personal.bakunevich.game.level.CollisionObjects;
 import personal.bakunevich.game.level.Level;
 import personal.bakunevich.graphics.TextureAtlas;
+import personal.bakunevich.utils.Sounds;
 import personal.bakunevich.utils.Time;
 
 import java.awt.*;
@@ -32,16 +33,25 @@ public class Game implements Runnable {
     public static final short   IDLE_TIME       = 1;
 
     public static final String  ATLAS_FILE_NAME = "tanks.png";
+    private static final String BACKGROUND_MUSIC = "/fon.wav";
 
-    private boolean             isRun;
-    private Thread              gameThread;
-    private final Graphics2D    graphics;
-    private final Input         input;
-    public   static TextureAtlas        atlas;
-    private final Player player;
-    private final Level         level;
-    private final CollisionObjects collisionObjects;
-    private static Map<EntityType, Bullet> bullets;
+    private boolean                         isRun;
+    private boolean                         isStartMenu;
+    private boolean                         isFinishMenu;
+    private Thread                          gameThread;
+    private final Graphics2D                graphics;
+    private final Input                     input;
+    public static TextureAtlas              atlas;
+    private Menu                            menu;
+    private final Player                    player;
+    private final Level                     level;
+    private static Map<EntityType, Bullet>  bullets;
+    private static ArrayList<Enemie>        enemies;
+    private final Sounds                    backgroundMusic;
+    public final CollisionObjects           collisionObjects;
+    public BoomAnimation                    boomAnimation;
+    public static int                       whichFinish;
+    private long                            currentTime;
 
 
     public Game() {
@@ -59,6 +69,11 @@ public class Game implements Runnable {
         player = new Player(Level.getPositionPlayer_X(), Level.getPositionPlayer_Y(), 4, 3, atlas);
         collisionObjects = new CollisionObjects();
         bullets = new HashMap<>();
+        boomAnimation = new BoomAnimation(atlas);
+        enemies = new ArrayList<>();
+        enemies.add(new Enemie(Level.getPositionEnemies_X(), Level.getPositionEnemies_Y(), 4, 3, atlas));
+        backgroundMusic = new Sounds(BACKGROUND_MUSIC, 0.65);
+        currentTime = System.currentTimeMillis();
 
     }
 
@@ -111,14 +126,12 @@ public class Game implements Runnable {
         if (bullets.size() != 0) {
             for (Iterator<Map.Entry<EntityType, Bullet>> iterator = bullets.entrySet().iterator();
                 iterator.hasNext();){
-                synchronized (iterator) {
                     Map.Entry<EntityType, Bullet> entry = iterator.next();
                     Bullet bullet = entry.getValue();
                     if (bullet.isLife())
                         bullet.update(input, level);
                     else
                         iterator.remove();
-                }
             }
         }
     }
@@ -185,6 +198,9 @@ public class Game implements Runnable {
     }
 
     public void run() {
+        start();
+        backgroundMusic.sound();
+        backgroundMusic.setLoop();
 
         int FPS = 0;
         int UPD = 0;
